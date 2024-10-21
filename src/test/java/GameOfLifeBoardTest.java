@@ -8,14 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameOfLifeBoardTest {
     private GameOfLifeBoard board;
-    private guPlainGameOfLifeSimulator simulator;
+    private PlainGameOfLifeSimulator simulator;
 
     /**
      * 5x5 - plansza testowa
      */
     @BeforeEach
     public void setUp() {
-        simulator = new guPlainGameOfLifeSimulator();
+        simulator = new PlainGameOfLifeSimulator();
         board = new GameOfLifeBoard(5, 5, simulator);
     }
 
