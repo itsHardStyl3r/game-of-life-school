@@ -59,6 +59,28 @@ public class GameOfLifeBoard {
     }
 
     /**
+     * Zwraca stan komórki w danym miejscu.
+     *
+     * @param row Rząd komórki
+     * @param col Kolumna komórki
+     * @return True — jeżeli żyje, false przeciwnie.
+     */
+    public boolean get(int row, int col) {
+        return board[row][col];
+    }
+
+    /**
+     * Ustawia stan komórki w danym miejscu.
+     *
+     * @param row Rząd komórki
+     * @param col Kolumna komórki
+     * @param in  True — jeżeli komórka ma żyć, false, jeżeli nie
+     */
+    public void set(int row, int col, boolean in) {
+        board[row][col] = in;
+    }
+
+    /**
      * Wykonuje krok symulacji w dostępnym symulatorze.
      */
     public void doSimulationStep() {

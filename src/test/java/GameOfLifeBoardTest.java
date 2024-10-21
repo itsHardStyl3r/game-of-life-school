@@ -3,8 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOfLifeBoardTest {
     private GameOfLifeBoard board;
@@ -159,5 +158,25 @@ public class GameOfLifeBoardTest {
             }
         }
         assertTrue(areBoardsDifferent, "Dwa wywołania powinny dać inny stan");
+    }
+
+    /**
+     * Test nieuwzględniający symulacji, sprawdzający tylko ustawianie i pobieranie komórek "na sztywno".
+     */
+    @Test
+    public void test_GetSetCell() {
+        boolean[][] initialBoard = {
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+                {false, false, false, false, false},
+        };
+        board.setBoard(initialBoard);
+        assertFalse(board.get(0, 0) && board.get(0, 1) && board.get(0, 2));
+
+        board.set(0, 2, true);
+        assertFalse(board.get(0, 0) && board.get(0, 1));
+        assertTrue(board.get(0, 2));
     }
 }
