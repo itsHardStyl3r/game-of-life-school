@@ -58,6 +58,9 @@ public class GameOfLifeBoard {
         }
     }
 
+    /**
+     * Wykonuje krok symulacji w dostępnym symulatorze.
+     */
     public void doSimulationStep() {
         simulator.doStep(this);
     }

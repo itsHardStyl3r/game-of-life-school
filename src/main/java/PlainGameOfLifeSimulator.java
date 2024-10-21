@@ -1,7 +1,6 @@
 /**
  * Klasa implementująca zasady gry w życie.
- * Implementuje interfejs {@link GameOfLifeSimulator}, który definiuje logikę
- * symulacji.
+ * Implementuje interfejs {@link GameOfLifeSimulator}, który definiuje logikę symulacji.
  */
 public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
 

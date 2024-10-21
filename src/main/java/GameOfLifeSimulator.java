@@ -1,7 +1,7 @@
 /**
- * Interfejs definiujący zachowanie symulatora gry w życie
- * Klasy implementujące ten interfejs będą musiały zdefiniować
- * metodę doStep, która przeprowadza jeden krok symulacji.
+ * Interfejs definiujący zachowanie symulatora gry w życie.
+ * Klasy implementujące ten interfejs będą musiały zdefiniować metodę doStep,
+ * która przeprowadza jeden krok symulacji.
  */
 public interface GameOfLifeSimulator {
     /**

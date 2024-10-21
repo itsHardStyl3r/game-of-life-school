@@ -11,7 +11,7 @@ public class GameOfLifeBoardTest {
     private PlainGameOfLifeSimulator simulator;
 
     /**
-     * 5x5 - plansza testowa
+     * 5×5 - plansza testowa
      */
     @BeforeEach
     public void setUp() {
@@ -20,7 +20,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza czy 1 umiera bez sąsiadów
+     * Sprawdza, czy 1 umiera bez sąsiadów.
      */
     @Test
     public void testDoStep_OneDies() {
@@ -44,7 +44,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza czy trzech przeżyje, jeśli ze sobą sąsiadują
+     * Sprawdza, czy trzech przeżyje, jeśli ze sobą sąsiadują.
      */
     @Test
     public void testDoStep_ThreeNeighborsSurvives() {
@@ -68,7 +68,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza czy odżywi pole z trzema żywmi sąsiadami
+     * Sprawdza, czy odżywi pole z trzema żywymi sąsiadami.
      */
     @Test
     public void testDoStep_ThreeNeighborsBecomesAlive() {
@@ -92,7 +92,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza prawidłowość zachowania przy zawijaniu
+     * Sprawdza prawidłowość zachowania przy zawijaniu.
      */
     @Test
     public void testDoStep_CellsAtEdges() {
@@ -116,7 +116,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza czy wiecej niż 3 sąsiadów zabija
+     * Sprawdza, czy więcej niż 3 sąsiadów zabija.
      */
     @Test
     public void testDoStep_MoreThanThreeDies() {
@@ -140,7 +140,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza czy generowane są różne stany planszy
+     * Sprawdza, czy generowane są różne stany planszy.
      */
     @Test
     public void testRandomBoard() {
