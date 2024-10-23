@@ -179,4 +179,15 @@ public class GameOfLifeBoardTest {
         assertFalse(board.get(0, 0) && board.get(0, 1));
         assertTrue(board.get(0, 2));
     }
+
+    /**
+     * Sprawdza, czy możliwe jest podanie liczby mniejszej od 1 w konstruktorze.
+     */
+    @Test
+    public void test_BadConstructor() {
+        board = new GameOfLifeBoard(-1, -1, simulator);
+        assertTrue(board.getBoard().length > 0 && board.getBoard()[0].length > 0);
+        board = new GameOfLifeBoard(0, 0, simulator);
+        assertTrue(board.getBoard().length > 0 && board.getBoard()[0].length > 0);
+    }
 }

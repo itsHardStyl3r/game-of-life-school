@@ -16,10 +16,10 @@ public class GameOfLifeBoard {
      * @param simulator Obiekt symulatora, który definiuje logikę ewolucji planszy w czasie.
      */
     public GameOfLifeBoard(int rows, int cols, GameOfLifeSimulator simulator) {
-        this.rows = rows;
-        this.cols = cols;
+        this.rows = Math.max(rows, 1);
+        this.cols = Math.max(cols, 1);
         this.simulator = simulator;
-        this.board = new boolean[rows][cols];
+        this.board = new boolean[this.rows][this.cols];
         initializeBoard();
     }
 
