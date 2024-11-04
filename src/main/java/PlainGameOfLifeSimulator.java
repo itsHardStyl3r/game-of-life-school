@@ -30,30 +30,4 @@ public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
             }
         }
     }
-    /**
-     * Oblicza liczbę żywych sąsiadów danej komórki (z uwzględnieniem, że krawędzie są "cykliczne").
-     *
-     * @param board Obiekt {@link GameOfLifeBoard} reprezentujący stan planszy.
-     * @param x     Współrzędna wiersza komórki.
-     * @param y     Współrzędna kolumny komórki.
-     * @param rows  Liczba wierszy na planszy.
-     * @param cols  Liczba kolumn na planszy.
-     * @return Liczba żywych sąsiadów komórki.
-     */
-    private int countLivingNeighbors(GameOfLifeBoard board, int x, int y, int rows, int cols) {
-        int liveNeighbors = 0;
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) {
-                    continue; // Pomijamy samą komórkę
-                }
-                int neighborX = (x + i + rows) % rows; // Obsługa krawędzi
-                int neighborY = (y + j + cols) % cols; // Obsługa krawędzi
-                liveNeighbors += board.get(neighborX, neighborY).getCellValue() ? 1 : 0; // Zliczamy żywych sąsiadów
-            }
-        }
-
-        return liveNeighbors;
-    }
 }
