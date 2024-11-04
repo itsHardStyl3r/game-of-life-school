@@ -1,25 +1,22 @@
-import java.util.Arrays;
 import java.util.Random;
 
 public class GameOfLifeBoard {
     private final int rows;
     private final int cols;
-    private final Random random = new Random();
-    private final boolean[][] board;
-    private final GameOfLifeSimulator simulator;
+    private final GameOfLifeCell[][] board;
+    private final PlainGameOfLifeSimulator simulator;
 
     /**
      * Konstruktor klasy, który przyjmuje wymiary planszy i losowo inicjalizuje stany komórek.
      *
      * @param rows      Liczba wierszy planszy.
      * @param cols      Liczba kolumn planszy.
-     * @param simulator Obiekt symulatora, który definiuje logikę ewolucji planszy w czasie.
      */
-    public GameOfLifeBoard(int rows, int cols, GameOfLifeSimulator simulator) {
+    public GameOfLifeBoard(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.simulator = simulator;
-        this.board = new boolean[rows][cols];
+        this.simulator = new PlainGameOfLifeSimulator();
+        this.board = new GameOfLifeCell[rows][cols];
         initializeBoard();
     }
 
@@ -27,45 +24,21 @@ public class GameOfLifeBoard {
      * Inicjalizuje planszę losowymi wartościami (0 lub 1).
      */
     private void initializeBoard() {
+        Random random = new Random();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                board[i][j] = random.nextBoolean(); // 0 - martwa, 1 - żywa
+                board[i][j] = new GameOfLifeCell(random.nextBoolean());
             }
         }
     }
 
     /**
-     * Zwraca kopię planszy, aby nie narażać jej na modyfikacje z zewnątrz.
-     *
-     * @return Kopia planszy jako tablica dwuwymiarowa.
-     */
-    public boolean[][] getBoard() {
-        boolean[][] boardCopy = new boolean[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            boardCopy[i] = Arrays.copyOf(board[i], cols);
-        }
-        return boardCopy;
-    }
-
-    /**
-     * Ustawia planszę na podaną tablicę, przyjmuje kopię wejściowej tablicy, aby uniknąć bezpośrednich modyfikacji.
-     *
-     * @param newBoard Nowa plansza jako tablica dwuwymiarowa.
-     */
-    public void setBoard(boolean[][] newBoard) {
-        for (int i = 0; i < rows; i++) {
-            board[i] = Arrays.copyOf(newBoard[i], cols);
-        }
-    }
-
-    /**
-     * Zwraca stan komórki w danym miejscu.
+     * Ustawia stan komórki w danym miejscu.
      *
      * @param row Rząd komórki
      * @param col Kolumna komórki
-     * @return True — jeżeli żyje, false przeciwnie.
      */
-    public boolean get(int row, int col) {
+    public GameOfLifeCell get(int row, int col) {
         return board[row][col];
     }
 
@@ -74,16 +47,23 @@ public class GameOfLifeBoard {
      *
      * @param row Rząd komórki
      * @param col Kolumna komórki
-     * @param in  True — jeżeli komórka ma żyć, false, jeżeli nie
+     * @param isAlive  True — jeżeli komórka ma żyć, false, jeżeli nie
      */
-    public void set(int row, int col, boolean in) {
-        board[row][col] = in;
+    public void set(int row, int col, boolean isAlive) {
+        board[row][col] = new GameOfLifeCell(isAlive);
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
     }
 
     /**
      * Wykonuje krok symulacji w dostępnym symulatorze.
      */
     public void doSimulationStep() {
-        simulator.doStep(this);
-    }
+        simulator.doStep(this);    }
 }

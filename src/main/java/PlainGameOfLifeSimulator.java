@@ -13,33 +13,23 @@ public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
      */
     @Override
     public void doStep(GameOfLifeBoard board) {
-        // Zakładamy, że rozmiar planszy to 5x5, ale może być dowolny
-        int rows = 5;
-        int cols = 5;
-        boolean[][] newBoard = new boolean[rows][cols];
+        int rows = board.getRows();
+        int cols = board.getCols();
 
-        // Przechodzimy przez wszystkie komórki planszy
+        // Obliczamy nowy stan dla każdej komórki
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                int livingNeighbors = countLivingNeighbors(board, i, j, rows, cols);
-
-                // Reguły gry (żywe/martwe komórki)
-                if (board.get(i, j)) {  // Komórka żywa
-                    newBoard[i][j] = livingNeighbors >= 2 && livingNeighbors <= 3; // Umiera
-                } else { // Martwa komórka
-                    newBoard[i][j] = livingNeighbors == 3; // Ożywa
-                }
+                board.get(i, j).nextState();
             }
         }
 
         // Aktualizacja stanu planszy
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                board.set(i, j, newBoard[i][j]); // Ustawienie nowego stanu
+                board.get(i, j).updateState();
             }
         }
     }
-
     /**
      * Oblicza liczbę żywych sąsiadów danej komórki (z uwzględnieniem, że krawędzie są "cykliczne").
      *
@@ -60,7 +50,7 @@ public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
                 }
                 int neighborX = (x + i + rows) % rows; // Obsługa krawędzi
                 int neighborY = (y + j + cols) % cols; // Obsługa krawędzi
-                liveNeighbors += board.get(neighborX, neighborY) ? 1 : 0; // Zliczamy żywych sąsiadów
+                liveNeighbors += board.get(neighborX, neighborY).getCellValue() ? 1 : 0; // Zliczamy żywych sąsiadów
             }
         }
 
