@@ -41,20 +41,39 @@ public class GameOfLifeBoard {
 
                 int[][] neighborPositions = {
                         {i - 1, j - 1}, {i - 1, j}, {i - 1, j + 1},
-                        {i, j - 1},                 {i, j + 1},
+                        {i, j - 1}, {i, j + 1},
                         {i + 1, j - 1}, {i + 1, j}, {i + 1, j + 1}
                 };
 
                 for (int[] pos : neighborPositions) {
-                    int x = pos[0];
-                    int y = pos[1];
+                    int x = roundingCoordinates(pos[0], false);
+                    int y = roundingCoordinates(pos[1], true);
+                    /*
                     if (x >= 0 && x < rows && y >= 0 && y < cols) {
                         neighbors[index++] = board[x][y];
-                    }
+                    }*/
+                    neighbors[index++] = board[x][y];
+
                 }
 
                 board[i][j].setNeighbors(neighbors);
             }
+        }
+    }
+
+    /**
+     * Konstruktor klasy, który przyjmuje wymiary planszy i losowo inicjalizuje stany komórek.
+     *
+     * @return Liczba wierszy planszy.
+     */
+    private int roundingCoordinates(int coord, boolean isColumn) {
+        int lenght = isColumn ? cols : rows;
+        if (coord < 0) {
+            return lenght + coord;
+        } else if (coord >= lenght) {
+            return coord % lenght;
+        } else {
+            return coord;
         }
     }
 

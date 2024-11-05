@@ -1,6 +1,7 @@
 public class GameOfLifeCell {
     private boolean value;
     private GameOfLifeCell[] neighbors;
+    private boolean nextState;
 
     public GameOfLifeCell(boolean value) {
         this.value = value;
@@ -20,19 +21,19 @@ public class GameOfLifeCell {
         }
 
         if (value) { // żywa
-            return aliveNeighbors == 2 || aliveNeighbors == 3; // Przeżywa
+            nextState = aliveNeighbors == 2 || aliveNeighbors == 3; // Przeżywa
         } else { // martwa
-            return aliveNeighbors == 3; // Ożywa
+            nextState = aliveNeighbors == 3; // Ożywa
         }
+        return nextState;
     }
 
     public void updateState() {
-        this.value = nextState();
+        this.value = nextState;
     }
 
     public void setNeighbors(GameOfLifeCell[] neighbors) {
         this.neighbors = neighbors;
     }
-
 
 }
