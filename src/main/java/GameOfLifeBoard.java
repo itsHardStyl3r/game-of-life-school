@@ -4,7 +4,7 @@ public class GameOfLifeBoard {
     private final int rows;
     private final int cols;
     private final GameOfLifeCell[][] board;
-    private final PlainGameOfLifeSimulator simulator;
+    private final GameOfLifeSimulator simulator;
 
     /**
      * Konstruktor klasy, który przyjmuje wymiary planszy i losowo inicjalizuje stany komórek.
@@ -12,10 +12,10 @@ public class GameOfLifeBoard {
      * @param rows Liczba wierszy planszy.
      * @param cols Liczba kolumn planszy.
      */
-    public GameOfLifeBoard(int rows, int cols) {
+    public GameOfLifeBoard(int rows, int cols, GameOfLifeSimulator simulator) {
         this.rows = rows;
         this.cols = cols;
-        this.simulator = new PlainGameOfLifeSimulator();
+        this.simulator = simulator;
         this.board = new GameOfLifeCell[rows][cols];
         initializeBoard();
         setNeighborsForCells();
