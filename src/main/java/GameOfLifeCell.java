@@ -30,14 +30,11 @@ public class GameOfLifeCell {
 
     /**
      * Oblicza stan komórki w następnym kroku symulacji na podstawie stanu jej sąsiadów.
+     *
+     * @return True, jeśli żywa, false, jeśli martwa.
      */
     public boolean nextState() {
-        int aliveNeighbors = 0;
-        for (GameOfLifeCell neighbor : neighbors) {
-            if (neighbor != null && neighbor.getCellValue()) {
-                aliveNeighbors++;
-            }
-        }
+        int aliveNeighbors  = countLivingNeighbors();
         if (value) {
             return aliveNeighbors == 2 || aliveNeighbors == 3;
         } else {
@@ -63,5 +60,15 @@ public class GameOfLifeCell {
         if (neighbors.length == 8) {
             this.neighbors = Arrays.copyOf(neighbors, 8);
         }
+    }
+
+    private int countLivingNeighbors() {
+        int liveNeighbors = 0;
+        for (GameOfLifeCell neighbor : neighbors) {
+            if (neighbor != null && neighbor.getCellValue()) {
+                liveNeighbors++;
+            }
+        }
+        return liveNeighbors;
     }
 }

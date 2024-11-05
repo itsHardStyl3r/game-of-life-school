@@ -1,5 +1,5 @@
 public abstract class GameOfLifeGroup {
-    protected GameOfLifeCell[] cells;
+    protected final GameOfLifeCell[] cells;
 
     public GameOfLifeGroup(GameOfLifeCell[] cells) {
         this.cells = cells;
@@ -16,12 +16,6 @@ public abstract class GameOfLifeGroup {
     }
 
     public int countDeadCells() {
-        int deadCount = 0;
-        for (GameOfLifeCell cell : cells) {
-            if (!cell.getCellValue()) {
-                deadCount++;
-            }
-        }
-        return deadCount;
+        return cells.length - countAliveCells();
     }
 }
