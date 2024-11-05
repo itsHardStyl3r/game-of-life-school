@@ -32,12 +32,7 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
         };
 
-        // Ustawiamy planszę
-        for (int i = 0; i < initialBoard.length; i++) {
-            for (int j = 0; j < initialBoard[i].length; j++) {
-                board.set(i, j, initialBoard[i][j]);
-            }
-        }
+        board = new GameOfLifeBoard(initialBoard, simulator);
 
         board.doSimulationStep();
 
@@ -49,10 +44,9 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
         };
 
-        // Sprawdzamy, czy plansza jest zgodna z oczekiwaniami
         for (int i = 0; i < expectedBoard.length; i++) {
             for (int j = 0; j < expectedBoard[i].length; j++) {
-                assertEquals(expectedBoard[i][j], board.get(i, j), String.format("Wartość w (%d, %d) powinna być %b", i, j, expectedBoard[i][j]));
+                assertEquals(expectedBoard[i][j], board.get(i, j));
             }
         }
     }

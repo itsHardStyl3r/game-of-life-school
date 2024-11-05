@@ -1,105 +1,99 @@
 import java.util.Random;
 
 public class GameOfLifeBoard {
-    private final int rows;
-    private final int cols;
     private final GameOfLifeCell[][] board;
-    private final PlainGameOfLifeSimulator simulator;
+    private final GameOfLifeRow[] rows;
+    private final GameOfLifeColumn[] columns;
+    private final int rowsCount;
+    private final int colsCount;
+    private final GameOfLifeSimulator simulator;
 
-    /**
-     * Konstruktor klasy, który przyjmuje wymiary planszy i losowo inicjalizuje stany komórek.
-     *
-     * @param rows Liczba wierszy planszy.
-     * @param cols Liczba kolumn planszy.
-     */
-    public GameOfLifeBoard(int rows, int cols) {
-        this.rows = rows;
-        this.cols = cols;
-        this.simulator = new PlainGameOfLifeSimulator();
-        this.board = new GameOfLifeCell[rows][cols];
-        initializeBoard();
-        setNeighborsForCells();
+    private boolean filled = false;
+
+    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator) {
+        this.rowsCount = rowsCount;
+        this.colsCount = colsCount;
+        this.board = new GameOfLifeCell[rowsCount][colsCount];
+        this.rows = new GameOfLifeRow[rowsCount];
+        this.columns = new GameOfLifeColumn[colsCount];
+        this.simulator = simulator;
+
+        initializeBoard(null);
+    }
+
+    public GameOfLifeBoard(boolean[][] initial, GameOfLifeSimulator simulator) {
+        this.rowsCount = initial.length;
+        this.colsCount = initial[0].length;
+        this.board = new GameOfLifeCell[rowsCount][colsCount];
+        this.rows = new GameOfLifeRow[rowsCount];
+        this.columns = new GameOfLifeColumn[colsCount];
+        this.simulator = simulator;
+
+        this.filled = true;
+        initializeBoard(initial);
     }
 
     /**
-     * Inicjalizuje planszę losowymi wartościami (0 lub 1).
+     * Inicjalizuje planszę odpowiednio do initial lub losowo.
      */
-    private void initializeBoard() {
+    private void initializeBoard(boolean[][] initial) {
         Random random = new Random();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                board[i][j] = new GameOfLifeCell(random.nextBoolean());
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < colsCount; j++) {
+                board[i][j] = new GameOfLifeCell(filled ? initial[i][j] : random.nextBoolean());
             }
+            rows[i] = new GameOfLifeRow(board[i]);
         }
+        for (int j = 0; j < colsCount; j++) {
+            GameOfLifeCell[] column = new GameOfLifeCell[rowsCount];
+            for (int i = 0; i < rowsCount; i++) {
+                column[i] = board[i][j];
+            }
+            columns[j] = new GameOfLifeColumn(column);
+        }
+        linkNeighbors();
     }
 
-    private void setNeighborsForCells() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+    private void linkNeighbors() {
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < colsCount; j++) {
                 GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
-                int index = 0;
-
-                int[][] neighborPositions = {
-                        {i - 1, j - 1}, {i - 1, j}, {i - 1, j + 1},
-                        {i, j - 1},                 {i, j + 1},
-                        {i + 1, j - 1}, {i + 1, j}, {i + 1, j + 1}
-                };
-
-                for (int[] pos : neighborPositions) {
-                    int x = pos[0];
-                    int y = pos[1];
-                    if (x >= 0 && x < rows && y >= 0 && y < cols) {
-                        neighbors[index++] = board[x][y];
+                int idx = 0;
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = -1; y <= 1; y++) {
+                        if (x == 0 && y == 0) {
+                            continue;
+                        }
+                        int ni = (i + x + rowsCount) % rowsCount;
+                        int nj = (j + y + colsCount) % colsCount;
+                        neighbors[idx++] = board[ni][nj];
                     }
                 }
-
                 board[i][j].setNeighbors(neighbors);
             }
         }
     }
 
-    /**
-     * Ustawia stan komórki w danym miejscu.
-     *
-     * @param row Rząd komórki
-     * @param col Kolumna komórki
-     */
-    public GameOfLifeCell get(int row, int col) {
-        return board[row][col];
+    public boolean get(int x, int y) {
+        return board[x][y].isAlive();
     }
 
-    /**
-     * Ustawia stan komórki w danym miejscu.
-     *
-     * @param row     Rząd komórki
-     * @param col     Kolumna komórki
-     * @param isAlive True — jeżeli komórka ma żyć, false, jeżeli nie
-     */
-    public void set(int row, int col, boolean isAlive) {
-        board[row][col] = new GameOfLifeCell(isAlive);
-        setNeighborsForCells();
-    }
-
-    public GameOfLifeRow getRow(int y) {
-        GameOfLifeCell[] rowCells = new GameOfLifeCell[cols];
-        System.arraycopy(board[y], 0, rowCells, 0, cols);
-        return new GameOfLifeRow(rowCells);
-    }
-
-    public GameOfLifeColumn getCol(int x) {
-        GameOfLifeCell[] colCells = new GameOfLifeCell[rows];
-        for (int i = 0; i < rows; i++) {
-            colCells[i] = board[i][x];
+    public void set(int x, int y, boolean isAlive) {
+        board[x][y].setAlive(isAlive);
+        rows[x] = new GameOfLifeRow(board[x]);
+        GameOfLifeCell[] column = new GameOfLifeCell[rowsCount];
+        for (int i = 0; i < rowsCount; i++) {
+            column[i] = board[i][y];
         }
-        return new GameOfLifeColumn(colCells);
+        columns[y] = new GameOfLifeColumn(column);
     }
 
-    public int getRows() {
+    public GameOfLifeRow[] getRows() {
         return rows;
     }
 
-    public int getCols() {
-        return cols;
+    public GameOfLifeColumn[] getColumns() {
+        return columns;
     }
 
     /**

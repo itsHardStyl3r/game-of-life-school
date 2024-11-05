@@ -13,20 +13,14 @@ public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
      */
     @Override
     public void doStep(GameOfLifeBoard board) {
-        int rows = board.getRows();
-        int cols = board.getCols();
-
-        // Obliczamy nowy stan dla każdej komórki
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                board.get(i, j).nextState();
+        for (GameOfLifeRow row : board.getRows()) {
+            for (GameOfLifeCell cell : row.cells) {
+                cell.nextState();
             }
         }
-
-        // Aktualizacja stanu planszy
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                board.get(i, j).updateState();
+        for (GameOfLifeRow row : board.getRows()) {
+            for (GameOfLifeCell cell : row.cells) {
+                cell.updateState();
             }
         }
     }
