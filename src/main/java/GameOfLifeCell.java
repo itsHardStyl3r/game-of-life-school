@@ -1,16 +1,36 @@
+import java.util.Arrays;
+
+/**
+ * Reprezentuje pojedynczą komórkę w grze w życie.
+ * Komórka posiada swój stan (żywa lub martwa) oraz referencje do swoich sąsiadów.
+ * Na podstawie stanu sąsiadów komórka decyduje o swoim stanie w kolejnym kroku symulacji.
+ */
 public class GameOfLifeCell {
     private boolean value;
     private GameOfLifeCell[] neighbors;
 
+    /**
+     * Tworzy nową komórkę z określonym stanem.
+     *
+     * @param value Stan komórki. True oznacza żywą, false — martwą.
+     */
     public GameOfLifeCell(boolean value) {
         this.value = value;
-        this.neighbors = new GameOfLifeCell[8]; // Max 8
+        this.neighbors = new GameOfLifeCell[8];
     }
 
+    /**
+     * Zwraca aktualny stan komórki.
+     *
+     * @return True, jeśli komórka jest żywa, false przeciwnie.
+     */
     public boolean getCellValue() {
         return value;
     }
 
+    /**
+     * Oblicza stan komórki w następnym kroku symulacji na podstawie stanu jej sąsiadów.
+     */
     public boolean nextState() {
         int aliveNeighbors = 0;
         for (GameOfLifeCell neighbor : neighbors) {
@@ -18,21 +38,30 @@ public class GameOfLifeCell {
                 aliveNeighbors++;
             }
         }
-
-        if (value) { // żywa
-            return aliveNeighbors == 2 || aliveNeighbors == 3; // Przeżywa
-        } else { // martwa
-            return aliveNeighbors == 3; // Ożywa
+        if (value) {
+            return aliveNeighbors == 2 || aliveNeighbors == 3;
+        } else {
+            return aliveNeighbors == 3;
         }
     }
 
-    public void updateState() {
-        this.value = nextState();
+    /**
+     * Zmienia stan komórki.
+     *
+     * @param newState Stan komórki. True oznacza żywą, false — martwą.
+     */
+    public void updateState(boolean newState) {
+        this.value = newState;
     }
 
+    /**
+     * Ustawia sąsiadów komórki. Metoda przyjmuje tablicę dokładnie 8 "komórek sąsiadów".
+     *
+     * @param neighbors Tablica 8 sąsiednich komórek typu GameOfLifeCell.
+     */
     public void setNeighbors(GameOfLifeCell[] neighbors) {
-        this.neighbors = neighbors;
+        if (neighbors.length == 8) {
+            this.neighbors = Arrays.copyOf(neighbors, 8);
+        }
     }
-
-
 }
