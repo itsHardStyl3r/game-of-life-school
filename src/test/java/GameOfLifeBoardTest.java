@@ -1,11 +1,12 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOfLifeBoardTest {
     private GameOfLifeBoard board;
@@ -309,5 +310,38 @@ public class GameOfLifeBoardTest {
 
         cell.setNeighbors(neighbors);
         assertEquals(8, neighbors.length, "Tablica sąsiadów powinna mieć dokładnie 8 elementów.");
+    }
+
+    /**
+     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
+     */
+    @Test
+    public void testArrayLength() throws Exception {
+        GameOfLifeCell cell = new GameOfLifeCell(false);
+
+        GameOfLifeCell[] invalidNeighbors = new GameOfLifeCell[7];
+        for (int i = 0; i < invalidNeighbors.length; i++) {
+            invalidNeighbors[i] = new GameOfLifeCell(false);
+        }
+
+        cell.setNeighbors(invalidNeighbors);
+
+        Field neighborsField = GameOfLifeCell.class.getDeclaredField("neighbors");
+        neighborsField.setAccessible(true);
+        GameOfLifeCell[] neighborsValue = (GameOfLifeCell[]) neighborsField.get(cell);
+
+        assertTrue(neighborsValue == null || Arrays.stream(neighborsValue).allMatch(Objects::isNull),
+                "Sąsiedzi nieustawieni, jeśli tablica nie ma 8 elementów.");
+
+        GameOfLifeCell[] validNeighbors = new GameOfLifeCell[8];
+        for (int i = 0; i < validNeighbors.length; i++) {
+            validNeighbors[i] = new GameOfLifeCell(false);
+        }
+
+        cell.setNeighbors(validNeighbors);
+        neighborsValue = (GameOfLifeCell[]) neighborsField.get(cell);
+
+        assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");
+        assertEquals(8, neighborsValue.length, "Tablica sąsiadów powinna mieć 8 elementów");
     }
 }
