@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -21,13 +22,13 @@ public class GameOfLifeBoard {
      * @param simulator Symulator gry.
      */
     public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator) {
-        this.rowsCount = rowsCount;
-        this.colsCount = colsCount;
-        this.board = new GameOfLifeCell[rowsCount][colsCount];
-        this.rows = new GameOfLifeRow[rowsCount];
-        this.columns = new GameOfLifeColumn[colsCount];
+        Objects.requireNonNull(simulator);
+        this.rowsCount = Math.max(rowsCount, 1);
+        this.colsCount = Math.max(colsCount, 1);
+        this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
+        this.rows = new GameOfLifeRow[this.rowsCount];
+        this.columns = new GameOfLifeColumn[this.colsCount];
         this.simulator = simulator;
-
         initializeBoard();
     }
 

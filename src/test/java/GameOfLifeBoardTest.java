@@ -339,4 +339,12 @@ public class GameOfLifeBoardTest {
         assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");
         assertEquals(8, neighborsValue.length, "Tablica sąsiadów powinna mieć 8 elementów");
     }
+
+    @Test
+    public void test_BadConstructor() {
+        board = new GameOfLifeBoard(-1, -1, simulator);
+        assertTrue(board.getRows().length > 0 && board.getColumns().length > 0);
+        board = new GameOfLifeBoard(0, 0, simulator);
+        assertTrue(board.getRows().length > 0 && board.getColumns().length > 0);
+    }
 }
