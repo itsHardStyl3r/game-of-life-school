@@ -1,10 +1,7 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -277,7 +274,7 @@ public class GameOfLifeBoardTest {
      * Sprawdza warunek neighbor != null && neighbor.getCellValue()
      */
     @Test
-    public void testCountLivingNeighbors() throws Exception {
+    public void testCountLivingNeighbors() {
         GameOfLifeCell cell = new GameOfLifeCell(false);
         GameOfLifeCell[] neighbors = {
                 new GameOfLifeCell(true),
@@ -290,10 +287,8 @@ public class GameOfLifeBoardTest {
                 new GameOfLifeCell(false)
         };
         cell.setNeighbors(neighbors);
-        Method countLivingNeighborsMethod = GameOfLifeCell.class.getDeclaredMethod("countLivingNeighbors");
-        countLivingNeighborsMethod.setAccessible(true);
-        int livingNeighbors = (int) countLivingNeighborsMethod.invoke(cell);
-        assertEquals(3, livingNeighbors, "Liczba żywych sąsiadów powinna wynosić 3.");
+
+        assertTrue(cell.nextState(), "Liczba żywych sąsiadów powinna wynosić 3.");
     }
 
     /**
@@ -316,7 +311,7 @@ public class GameOfLifeBoardTest {
      * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
      */
     @Test
-    public void testArrayLength() throws Exception {
+    public void testArrayLength() {
         GameOfLifeCell cell = new GameOfLifeCell(false);
 
         GameOfLifeCell[] invalidNeighbors = new GameOfLifeCell[7];
@@ -327,11 +322,8 @@ public class GameOfLifeBoardTest {
         // Ustawienie sąsiadów z tablicą o niewłaściwej wielkości
         cell.setNeighbors(invalidNeighbors);
 
-        Field neighborsField = GameOfLifeCell.class.getDeclaredField("neighbors");
-        neighborsField.setAccessible(true);
-        GameOfLifeCell[] neighborsValue = (GameOfLifeCell[]) neighborsField.get(cell);
-
-        assertTrue(neighborsValue == null || Arrays.stream(neighborsValue).allMatch(Objects::isNull),
+        GameOfLifeCell[] neighborsValue = cell.getNeighbors();
+        assertTrue(neighborsValue == null || Arrays.stream(neighborsValue).allMatch(java.util.Objects::isNull),
                 "Sąsiedzi nieustawieni, jeśli tablica nie ma 8 elementów.");
 
         GameOfLifeCell[] validNeighbors = new GameOfLifeCell[8];
@@ -341,7 +333,7 @@ public class GameOfLifeBoardTest {
 
         // Ustawienie poprawnej tablicy sąsiadów
         cell.setNeighbors(validNeighbors);
-        neighborsValue = (GameOfLifeCell[]) neighborsField.get(cell);
+        neighborsValue = cell.getNeighbors();
 
         // Sprawdzenie, czy sąsiedzi zostali poprawnie ustawieni, gdy tablica ma dokładnie 8 elementów
         assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");

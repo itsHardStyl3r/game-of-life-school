@@ -78,4 +78,8 @@ public class GameOfLifeCell {
         }
         return liveNeighbors;
     }
+
+    GameOfLifeCell[] getNeighbors() {
+        return neighbors;
+    }
 }
