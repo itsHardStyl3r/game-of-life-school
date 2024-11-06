@@ -80,6 +80,6 @@ public class GameOfLifeCell {
     }
 
     GameOfLifeCell[] getNeighbors() {
-        return neighbors;
+        return Arrays.copyOf(neighbors, neighbors.length);
     }
 }
