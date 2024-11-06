@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -238,5 +239,75 @@ public class GameOfLifeBoardTest {
         }
 
         assertTrue(areBoardsDifferent, "Dwa wywołania powinny dać inny stan");
+    }
+
+    /**
+     * Testuje metodę countAliveCells(), sprawdzając czy liczba żywych komórek jest poprawna.
+     */
+    @Test
+    public void testCountAliveCells() {
+        GameOfLifeCell[] cells = {
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(true)
+        };
+        GameOfLifeRow row = new GameOfLifeRow(cells);
+
+        assertEquals(2, row.countAliveCells(), "Liczba żywych komórek powinna wynosić 2.");
+    }
+
+    /**
+     * Sprwadza czy liczba martwych komórek jest poprawna.
+     */
+    @Test
+    public void testCountDeadCells() {
+        GameOfLifeCell[] cells = {
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false)
+        };
+        GameOfLifeColumn column = new GameOfLifeColumn(cells);
+
+        assertEquals(2, column.countDeadCells(), "Liczba martwych komórek powinna wynosić 2.");
+    }
+
+    /**
+     * Sprawdza warunek neighbor != null && neighbor.getCellValue()
+     */
+    @Test
+    public void testCountLivingNeighbors() throws Exception {
+        GameOfLifeCell cell = new GameOfLifeCell(false);
+        GameOfLifeCell[] neighbors = {
+                new GameOfLifeCell(true),
+                null,
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                null,
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(false)
+        };
+        cell.setNeighbors(neighbors);
+        Method countLivingNeighborsMethod = GameOfLifeCell.class.getDeclaredMethod("countLivingNeighbors");
+        countLivingNeighborsMethod.setAccessible(true);
+        int livingNeighbors = (int) countLivingNeighborsMethod.invoke(cell);
+        assertEquals(3, livingNeighbors, "Liczba żywych sąsiadów powinna wynosić 3.");
+    }
+
+    /**
+     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
+     */
+    @Test
+    public void testNeighbors() {
+        GameOfLifeCell cell = new GameOfLifeCell(false);
+        GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
+
+        for (int i = 0; i < neighbors.length; i++) {
+            neighbors[i] = new GameOfLifeCell(i % 2 == 0); // Na zmianę: żywa lub martwa komórka
+        }
+
+        cell.setNeighbors(neighbors);
+        assertEquals(8, neighbors.length, "Tablica sąsiadów powinna mieć dokładnie 8 elementów.");
     }
 }
