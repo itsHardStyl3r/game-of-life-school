@@ -1,87 +1,141 @@
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Klasa reprezentująca planszę do gry w życie.
+ */
 public class GameOfLifeBoard {
-    private final int rows;
-    private final int cols;
-    private final Random random = new Random();
-    private final boolean[][] board;
+    private final GameOfLifeCell[][] board;
+    private final GameOfLifeRow[] rows;
+    private final GameOfLifeColumn[] columns;
+    private final int rowsCount;
+    private final int colsCount;
     private final GameOfLifeSimulator simulator;
 
     /**
-     * Konstruktor klasy, który przyjmuje wymiary planszy i losowo inicjalizuje stany komórek.
+     * Konstruktor klasy {@link GameOfLifeBoard}.
+     * Inicjalizuje planszę z zadanymi wymiarami i symulatorem.
      *
-     * @param rows      Liczba wierszy planszy.
-     * @param cols      Liczba kolumn planszy.
-     * @param simulator Obiekt symulatora, który definiuje logikę ewolucji planszy w czasie.
+     * @param rowsCount Liczba wierszy planszy.
+     * @param colsCount Liczba kolumn planszy.
+     * @param simulator Symulator gry.
      */
-    public GameOfLifeBoard(int rows, int cols, GameOfLifeSimulator simulator) {
-        this.rows = Math.max(rows, 1);
-        this.cols = Math.max(cols, 1);
+    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator) {
+        Objects.requireNonNull(simulator);
+        this.rowsCount = Math.max(rowsCount, 1);
+        this.colsCount = Math.max(colsCount, 1);
+        this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
+        this.rows = new GameOfLifeRow[this.rowsCount];
+        this.columns = new GameOfLifeColumn[this.colsCount];
         this.simulator = simulator;
-        this.board = new boolean[this.rows][this.cols];
         initializeBoard();
     }
 
     /**
-     * Inicjalizuje planszę losowymi wartościami (0 lub 1).
+     * Inicjalizuje planszę losowymi wartościami komórek oraz
+     * tworzy obiekty {@link GameOfLifeRow} i {@link GameOfLifeColumn} dla każdego wiersza i kolumny.
      */
     private void initializeBoard() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                board[i][j] = random.nextBoolean(); // 0 - martwa, 1 - żywa
+        Random random = new Random();
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < colsCount; j++) {
+                board[i][j] = new GameOfLifeCell(random.nextBoolean());
+            }
+            rows[i] = new GameOfLifeRow(board[i]);
+        }
+        for (int j = 0; j < colsCount; j++) {
+            GameOfLifeCell[] column = new GameOfLifeCell[rowsCount];
+            for (int i = 0; i < rowsCount; i++) {
+                column[i] = board[i][j];
+            }
+            columns[j] = new GameOfLifeColumn(column);
+        }
+        linkNeighbors();
+    }
+
+    /**
+     * Łączy sąsiadujące komórki z każdą komórką w planszy, umożliwiając im dostęp do swoich sąsiadów.
+     */
+    private void linkNeighbors() {
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < colsCount; j++) {
+                GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
+                int idx = 0;
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = -1; y <= 1; y++) {
+                        if (x == 0 && y == 0) {
+                            continue;
+                        }
+                        int ni = (i + x + rowsCount) % rowsCount;
+                        int nj = (j + y + colsCount) % colsCount;
+                        neighbors[idx++] = board[ni][nj];
+                    }
+                }
+                board[i][j].setNeighbors(neighbors);
             }
         }
     }
 
     /**
-     * Zwraca kopię planszy, aby nie narażać jej na modyfikacje z zewnątrz.
+     * Zwraca wartość stanu komórki na danej pozycji.
      *
-     * @return Kopia planszy jako tablica dwuwymiarowa.
+     * @param x Indeks wiersza.
+     * @param y Indeks kolumny.
+     * @return True, jeśli komórka jest żywa; false, jeśli jest martwa.
      */
-    public boolean[][] getBoard() {
-        boolean[][] boardCopy = new boolean[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            boardCopy[i] = Arrays.copyOf(board[i], cols);
+    public boolean get(int x, int y) {
+        return board[x][y].getCellValue();
+    }
+
+    /**
+     * Zwraca komórkę na danej pozycji.
+     *
+     * @param x Indeks wiersza.
+     * @param y Indeks kolumny.
+     * @return GameOfLifeCell
+     */
+    public GameOfLifeCell getCell(int x, int y) {
+        return board[x][y];
+    }
+
+    /**
+     * Ustawia nowy stan komórki na danej pozycji.
+     *
+     * @param x Indeks wiersza.
+     * @param y Indeks kolumny.
+     * @param state Nowy stan komórki (true — żywa, false — martwa).
+     */
+    public void set(int x, int y, boolean state) {
+        board[x][y].updateState(state);
+        rows[x] = new GameOfLifeRow(board[x]);
+        GameOfLifeCell[] column = new GameOfLifeCell[rowsCount];
+        for (int i = 0; i < rowsCount; i++) {
+            column[i] = board[i][y];
         }
-        return boardCopy;
+        columns[y] = new GameOfLifeColumn(column);
     }
 
     /**
-     * Ustawia planszę na podaną tablicę, przyjmuje kopię wejściowej tablicy, aby uniknąć bezpośrednich modyfikacji.
+     * Zwraca kopię tablicy obiektów {@link GameOfLifeRow}.
      *
-     * @param newBoard Nowa plansza jako tablica dwuwymiarowa.
+     * @return Kopia tablicy rzędów planszy.
      */
-    public void setBoard(boolean[][] newBoard) {
-        for (int i = 0; i < rows; i++) {
-            board[i] = Arrays.copyOf(newBoard[i], cols);
-        }
+    public GameOfLifeRow[] getRows() {
+        return Arrays.copyOf(rows, rows.length);
     }
 
     /**
-     * Zwraca stan komórki w danym miejscu.
+     * Zwraca kopię tablicy obiektów {@link GameOfLifeColumn}.
      *
-     * @param row Rząd komórki
-     * @param col Kolumna komórki
-     * @return True — jeżeli żyje, false przeciwnie.
+     * @return Kopia tablicy kolumn planszy.
      */
-    public boolean get(int row, int col) {
-        return board[row][col];
+    public GameOfLifeColumn[] getColumns() {
+        return Arrays.copyOf(columns, columns.length);
     }
 
     /**
-     * Ustawia stan komórki w danym miejscu.
-     *
-     * @param row Rząd komórki
-     * @param col Kolumna komórki
-     * @param in  True — jeżeli komórka ma żyć, false, jeżeli nie
-     */
-    public void set(int row, int col, boolean in) {
-        board[row][col] = in;
-    }
-
-    /**
-     * Wykonuje krok symulacji w dostępnym symulatorze.
+     * Wykonuje krok symulacji w dostępnej symulacji.
      */
     public void doSimulationStep() {
         simulator.doStep(this);

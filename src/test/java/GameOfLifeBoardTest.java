@@ -10,7 +10,7 @@ public class GameOfLifeBoardTest {
     private PlainGameOfLifeSimulator simulator;
 
     /**
-     * 5×5 - plansza testowa
+     * 5x5 - plansza testowa
      */
     @BeforeEach
     public void setUp() {
@@ -19,7 +19,7 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Sprawdza, czy 1 umiera bez sąsiadów.
+     * Sprawdza czy 1 umiera bez sąsiadów
      */
     @Test
     public void testDoStep_OneDies() {
@@ -30,8 +30,16 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        board.setBoard(initialBoard);
+
+        // Ustawiamy planszę
+        for (int i = 0; i < initialBoard.length; i++) {
+            for (int j = 0; j < initialBoard[i].length; j++) {
+                board.set(i, j, initialBoard[i][j]);
+            }
+        }
+
         board.doSimulationStep();
+
         boolean[][] expectedBoard = {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
@@ -39,11 +47,17 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        assertArrayEquals(expectedBoard, board.getBoard());
+
+        // Sprawdzamy, czy plansza jest zgodna z oczekiwaniami
+        for (int i = 0; i < expectedBoard.length; i++) {
+            for (int j = 0; j < expectedBoard[i].length; j++) {
+                assertEquals(expectedBoard[i][j], board.get(i, j), String.format("Wartość w (%d, %d) powinna być %b", i, j, expectedBoard[i][j]));
+            }
+        }
     }
 
     /**
-     * Sprawdza, czy trzech przeżyje, jeśli ze sobą sąsiadują.
+     * Sprawdza czy trzech przeżyje, jeśli ze sobą sąsiadują
      */
     @Test
     public void testDoStep_ThreeNeighborsSurvives() {
@@ -54,8 +68,16 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        board.setBoard(initialBoard);
+
+        // Ustawiamy planszę
+        for (int i = 0; i < initialBoard.length; i++) {
+            for (int j = 0; j < initialBoard[i].length; j++) {
+                board.set(i, j, initialBoard[i][j]);
+            }
+        }
+
         board.doSimulationStep();
+
         boolean[][] expectedBoard = {
                 {false, false, false, false, false},
                 {false, true, true, false, false},
@@ -63,11 +85,17 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        assertArrayEquals(expectedBoard, board.getBoard());
+
+        // Sprawdzamy, czy plansza jest zgodna z oczekiwaniami
+        for (int i = 0; i < expectedBoard.length; i++) {
+            for (int j = 0; j < expectedBoard[i].length; j++) {
+                assertEquals(expectedBoard[i][j], board.get(i, j), String.format("Wartość w (%d, %d) powinna być %b", i, j, expectedBoard[i][j]));
+            }
+        }
     }
 
     /**
-     * Sprawdza, czy odżywi pole z trzema żywymi sąsiadami.
+     * Sprawdza czy odżywi pole z trzema żywmi sąsiadami
      */
     @Test
     public void testDoStep_ThreeNeighborsBecomesAlive() {
@@ -78,8 +106,16 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        board.setBoard(initialBoard);
+
+        // Ustawiamy planszę
+        for (int i = 0; i < initialBoard.length; i++) {
+            for (int j = 0; j < initialBoard[i].length; j++) {
+                board.set(i, j, initialBoard[i][j]);
+            }
+        }
+
         board.doSimulationStep();
+
         boolean[][] expectedBoard = {
                 {false, false, false, false, false},
                 {false, true, true, false, false},
@@ -87,11 +123,17 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        assertArrayEquals(expectedBoard, board.getBoard());
+
+        // Sprawdzamy, czy plansza jest zgodna z oczekiwaniami
+        for (int i = 0; i < expectedBoard.length; i++) {
+            for (int j = 0; j < expectedBoard[i].length; j++) {
+                assertEquals(expectedBoard[i][j], board.get(i, j), String.format("Wartość w (%d, %d) powinna być %b", i, j, expectedBoard[i][j]));
+            }
+        }
     }
 
     /**
-     * Sprawdza prawidłowość zachowania przy zawijaniu.
+     * Sprawdza prawidłowość zachowania przy zawijaniu
      */
     @Test
     public void testDoStep_CellsAtEdges() {
@@ -102,8 +144,16 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, false, false, false, false},
         };
-        board.setBoard(initialBoard);
+
+        // Ustawiamy planszę
+        for (int i = 0; i < initialBoard.length; i++) {
+            for (int j = 0; j < initialBoard[i].length; j++) {
+                board.set(i, j, initialBoard[i][j]);
+            }
+        }
+
         board.doSimulationStep();
+
         boolean[][] expectedBoard = {
                 {false, true, false, false, false},
                 {false, true, false, false, false},
@@ -111,11 +161,17 @@ public class GameOfLifeBoardTest {
                 {false, false, false, false, false},
                 {false, true, false, false, false},
         };
-        assertArrayEquals(expectedBoard, board.getBoard());
+
+        // Sprawdzamy, czy plansza jest zgodna z oczekiwaniami
+        for (int i = 0; i < expectedBoard.length; i++) {
+            for (int j = 0; j < expectedBoard[i].length; j++) {
+                assertEquals(expectedBoard[i][j], board.get(i, j), String.format("Wartość w (%d, %d) powinna być %b", i, j, expectedBoard[i][j]));
+            }
+        }
     }
 
     /**
-     * Sprawdza, czy więcej niż 3 sąsiadów zabija.
+     * Sprawdza czy więcej niż 3 sąsiadów zabija
      */
     @Test
     public void testDoStep_MoreThanThreeDies() {
@@ -126,8 +182,16 @@ public class GameOfLifeBoardTest {
                 {false, false, true, false, false},
                 {false, false, false, false, false},
         };
-        board.setBoard(initialBoard);
+
+        // Ustawiamy planszę
+        for (int i = 0; i < initialBoard.length; i++) {
+            for (int j = 0; j < initialBoard[i].length; j++) {
+                board.set(i, j, initialBoard[i][j]);
+            }
+        }
+
         board.doSimulationStep();
+
         boolean[][] expectedBoard = {
                 {false, false, false, false, false},
                 {false, true, true, true, false},
@@ -135,21 +199,35 @@ public class GameOfLifeBoardTest {
                 {false, true, true, true, false},
                 {false, false, false, false, false},
         };
-        assertArrayEquals(expectedBoard, board.getBoard());
+
+        // Sprawdzamy, czy plansza jest zgodna z oczekiwaniami
+        for (int i = 0; i < expectedBoard.length; i++) {
+            for (int j = 0; j < expectedBoard[i].length; j++) {
+                assertEquals(expectedBoard[i][j], board.get(i, j), String.format("Wartość w (%d, %d) powinna być %b", i, j, expectedBoard[i][j]));
+            }
+        }
     }
 
     /**
-     * Sprawdza, czy generowane są różne stany planszy.
+     * Sprawdza czy generowane są różne stany planszy
      */
     @Test
     public void testRandomBoard() {
         GameOfLifeBoard board1 = new GameOfLifeBoard(5, 5, simulator);
         GameOfLifeBoard board2 = new GameOfLifeBoard(5, 5, simulator);
 
-        boolean[][] initialBoard1 = board1.getBoard();
-        boolean[][] initialBoard2 = board2.getBoard();
+        boolean[][] initialBoard1 = new boolean[5][5];
+        boolean[][] initialBoard2 = new boolean[5][5];
 
-        //Zakładamy, że plansze nie będą takie same
+        // Uzupełniamy tablice do sprawdzenia różnic
+        for (int i = 0; i < initialBoard1.length; i++) {
+            for (int j = 0; j < initialBoard1[i].length; j++) {
+                initialBoard1[i][j] = board1.get(i, j);
+                initialBoard2[i][j] = board2.get(i, j);
+            }
+        }
+
+        // Zakładamy, że plansze nie będą takie same
         boolean areBoardsDifferent = false;
         for (int i = 0; i < initialBoard1.length; i++) {
             if (!Arrays.equals(initialBoard1[i], initialBoard2[i])) {
@@ -157,37 +235,116 @@ public class GameOfLifeBoardTest {
                 break;
             }
         }
+
         assertTrue(areBoardsDifferent, "Dwa wywołania powinny dać inny stan");
     }
 
     /**
-     * Test nieuwzględniający symulacji, sprawdzający tylko ustawianie i pobieranie komórek "na sztywno".
+     * Testuje metodę countAliveCells(), sprawdzając czy liczba żywych komórek jest poprawna.
      */
     @Test
-    public void test_GetSetCell() {
-        boolean[][] initialBoard = {
-                {false, false, false, false, false},
-                {false, false, false, false, false},
-                {false, false, false, false, false},
-                {false, false, false, false, false},
-                {false, false, false, false, false},
+    public void testCountAliveCells() {
+        GameOfLifeCell[] cells = {
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(true)
         };
-        board.setBoard(initialBoard);
-        assertFalse(board.get(0, 0) && board.get(0, 1) && board.get(0, 2));
+        GameOfLifeRow row = new GameOfLifeRow(cells);
 
-        board.set(0, 2, true);
-        assertFalse(board.get(0, 0) && board.get(0, 1));
-        assertTrue(board.get(0, 2));
+        assertEquals(2, row.countAliveCells(), "Liczba żywych komórek powinna wynosić 2.");
     }
 
     /**
-     * Sprawdza, czy możliwe jest podanie liczby mniejszej od 1 w konstruktorze.
+     * Sprwadza czy liczba martwych komórek jest poprawna.
      */
+    @Test
+    public void testCountDeadCells() {
+        GameOfLifeCell[] cells = {
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false)
+        };
+        GameOfLifeColumn column = new GameOfLifeColumn(cells);
+
+        assertEquals(2, column.countDeadCells(), "Liczba martwych komórek powinna wynosić 2.");
+    }
+
+    /**
+     * Sprawdza warunek neighbor != null && neighbor.getCellValue()
+     */
+    @Test
+    public void testCountLivingNeighbors() {
+        GameOfLifeCell cell = new GameOfLifeCell(false);
+        GameOfLifeCell[] neighbors = {
+                new GameOfLifeCell(true),
+                null,
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                null,
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(false)
+        };
+        cell.setNeighbors(neighbors);
+
+        assertTrue(cell.nextState(), "Liczba żywych sąsiadów powinna wynosić 3.");
+    }
+
+    /**
+     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
+     */
+    @Test
+    public void testNeighbors() {
+        GameOfLifeCell cell = new GameOfLifeCell(false);
+        GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
+
+        for (int i = 0; i < neighbors.length; i++) {
+            neighbors[i] = new GameOfLifeCell(i % 2 == 0);
+        }
+
+        cell.setNeighbors(neighbors);
+        assertEquals(8, neighbors.length, "Tablica sąsiadów powinna mieć dokładnie 8 elementów.");
+    }
+
+    /**
+     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
+     */
+    @Test
+    public void testArrayLength() {
+        GameOfLifeCell cell = new GameOfLifeCell(false);
+
+        GameOfLifeCell[] invalidNeighbors = new GameOfLifeCell[7];
+        for (int i = 0; i < invalidNeighbors.length; i++) {
+            invalidNeighbors[i] = new GameOfLifeCell(false);
+        }
+
+        // Ustawienie sąsiadów z tablicą o niewłaściwej wielkości
+        cell.setNeighbors(invalidNeighbors);
+
+        GameOfLifeCell[] neighborsValue = cell.getNeighbors();
+        assertTrue(neighborsValue == null || Arrays.stream(neighborsValue).allMatch(java.util.Objects::isNull),
+                "Sąsiedzi nieustawieni, jeśli tablica nie ma 8 elementów.");
+
+        GameOfLifeCell[] validNeighbors = new GameOfLifeCell[8];
+        for (int i = 0; i < validNeighbors.length; i++) {
+            validNeighbors[i] = new GameOfLifeCell(false);
+        }
+
+        // Ustawienie poprawnej tablicy sąsiadów
+        cell.setNeighbors(validNeighbors);
+        neighborsValue = cell.getNeighbors();
+
+        // Sprawdzenie, czy sąsiedzi zostali poprawnie ustawieni, gdy tablica ma dokładnie 8 elementów
+        assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");
+        assertEquals(8, neighborsValue.length, "Tablica sąsiadów powinna mieć 8 elementów");
+    }
+
     @Test
     public void test_BadConstructor() {
         board = new GameOfLifeBoard(-1, -1, simulator);
-        assertTrue(board.getBoard().length > 0 && board.getBoard()[0].length > 0);
+        assertTrue(board.getRows().length > 0 && board.getColumns().length > 0);
         board = new GameOfLifeBoard(0, 0, simulator);
-        assertTrue(board.getBoard().length > 0 && board.getBoard()[0].length > 0);
+        assertTrue(board.getRows().length > 0 && board.getColumns().length > 0);
     }
 }
