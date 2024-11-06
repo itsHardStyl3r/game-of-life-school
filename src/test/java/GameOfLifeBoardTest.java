@@ -305,7 +305,7 @@ public class GameOfLifeBoardTest {
         GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
 
         for (int i = 0; i < neighbors.length; i++) {
-            neighbors[i] = new GameOfLifeCell(i % 2 == 0); // Na zmianę: żywa lub martwa komórka
+            neighbors[i] = new GameOfLifeCell(i % 2 == 0);
         }
 
         cell.setNeighbors(neighbors);
@@ -324,6 +324,7 @@ public class GameOfLifeBoardTest {
             invalidNeighbors[i] = new GameOfLifeCell(false);
         }
 
+        // Ustawienie sąsiadów z tablicą o niewłaściwej wielkości
         cell.setNeighbors(invalidNeighbors);
 
         Field neighborsField = GameOfLifeCell.class.getDeclaredField("neighbors");
@@ -338,9 +339,11 @@ public class GameOfLifeBoardTest {
             validNeighbors[i] = new GameOfLifeCell(false);
         }
 
+        // Ustawienie poprawnej tablicy sąsiadów
         cell.setNeighbors(validNeighbors);
         neighborsValue = (GameOfLifeCell[]) neighborsField.get(cell);
 
+        // Sprawdzenie, czy sąsiedzi zostali poprawnie ustawieni, gdy tablica ma dokładnie 8 elementów
         assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");
         assertEquals(8, neighborsValue.length, "Tablica sąsiadów powinna mieć 8 elementów");
     }

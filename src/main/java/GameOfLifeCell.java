@@ -34,7 +34,7 @@ public class GameOfLifeCell {
      * @return True, jeśli żywa, false, jeśli martwa.
      */
     public boolean nextState() {
-        int aliveNeighbors  = countLivingNeighbors();
+        int aliveNeighbors = countLivingNeighbors();
         if (value) {
             return aliveNeighbors == 2 || aliveNeighbors == 3;
         } else {
@@ -62,6 +62,13 @@ public class GameOfLifeCell {
         }
     }
 
+    /**
+     * Zlicza liczbę żywych sąsiadów wokół tej komórki.
+     * Metoda przechodzi przez tablicę `neighbors` i zwiększa
+     * licznik `liveNeighbors` dla każdego niepustego sąsiada, który jest żywy.
+     *
+     * @return liczba żywych sąsiadów wokół tej komórki
+     */
     private int countLivingNeighbors() {
         int liveNeighbors = 0;
         for (GameOfLifeCell neighbor : neighbors) {
