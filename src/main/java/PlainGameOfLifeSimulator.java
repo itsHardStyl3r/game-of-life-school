@@ -13,8 +13,8 @@ public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
      */
     @Override
     public void doStep(GameOfLifeBoard board) {
-        int rows = board.getRows().length;
-        int columns = board.getColumns().length;
+        int rows = board.getRows().size();
+        int columns = board.getColumns().size();
         boolean[][] nextState = new boolean[rows][columns];
 
         for (int i = 0; i < rows; i++) {

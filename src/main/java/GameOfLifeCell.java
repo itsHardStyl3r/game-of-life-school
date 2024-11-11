@@ -1,4 +1,6 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Reprezentuje pojedynczą komórkę w grze w życie.
@@ -7,7 +9,7 @@ import java.util.Arrays;
  */
 public class GameOfLifeCell {
     private boolean value;
-    private GameOfLifeCell[] neighbors;
+    private List<GameOfLifeCell> neighbors;
 
     /**
      * Tworzy nową komórkę z określonym stanem.
@@ -16,7 +18,7 @@ public class GameOfLifeCell {
      */
     public GameOfLifeCell(boolean value) {
         this.value = value;
-        this.neighbors = new GameOfLifeCell[8];
+        this.neighbors = new ArrayList<>(8);
     }
 
     /**
@@ -52,19 +54,8 @@ public class GameOfLifeCell {
     }
 
     /**
-     * Ustawia sąsiadów komórki. Metoda przyjmuje tablicę dokładnie 8 "komórek sąsiadów".
-     *
-     * @param neighbors Tablica 8 sąsiednich komórek typu GameOfLifeCell.
-     */
-    public void setNeighbors(GameOfLifeCell[] neighbors) {
-        if (neighbors.length == 8) {
-            this.neighbors = Arrays.copyOf(neighbors, 8);
-        }
-    }
-
-    /**
      * Zlicza liczbę żywych sąsiadów wokół tej komórki.
-     * Metoda przechodzi przez tablicę `neighbors` i zwiększa
+     * Metoda przechodzi przez listę `neighbors` i zwiększa
      * licznik `liveNeighbors` dla każdego niepustego sąsiada, który jest żywy.
      *
      * @return liczba żywych sąsiadów wokół tej komórki
@@ -79,7 +70,18 @@ public class GameOfLifeCell {
         return liveNeighbors;
     }
 
-    GameOfLifeCell[] getNeighbors() {
-        return Arrays.copyOf(neighbors, neighbors.length);
+    public List<GameOfLifeCell> getNeighbors() {
+        return Collections.unmodifiableList(neighbors);
+    }
+
+    /**
+     * Ustawia sąsiadów komórki. Metoda przyjmuje listę dokładnie 8 "komórek sąsiadów".
+     *
+     * @param neighbors Lista 8 sąsiednich komórek typu GameOfLifeCell.
+     */
+    public void setNeighbors(List<GameOfLifeCell> neighbors) {
+        if (neighbors.size() == 8) {
+            this.neighbors = new ArrayList<>(neighbors);
+        }
     }
 }
