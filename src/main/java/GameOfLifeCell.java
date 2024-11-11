@@ -78,10 +78,12 @@ public class GameOfLifeCell {
      * Ustawia sąsiadów komórki. Metoda przyjmuje listę dokładnie 8 "komórek sąsiadów".
      *
      * @param neighbors Lista 8 sąsiednich komórek typu GameOfLifeCell.
+     * @throws IllegalArgumentException Gdy rozmiar listy sąsiadów nie wynosi 8.
      */
-    public void setNeighbors(List<GameOfLifeCell> neighbors) {
-        if (neighbors.size() == 8) {
-            this.neighbors = new ArrayList<>(neighbors);
+    public void setNeighbors(List<GameOfLifeCell> neighbors) throws IllegalArgumentException {
+        if (neighbors.size() != 8) {
+            throw new IllegalArgumentException("Rozmiar sąsiadów musi wynosić 8.");
         }
+        this.neighbors = new ArrayList<>(neighbors);
     }
 }
