@@ -146,4 +146,24 @@ public class GameOfLifeBoard {
     public void doSimulationStep() {
         simulator.doStep(this);
     }
+
+    /**
+     * Zwraca kolumnę o indeksie i jako obiekt GameOfLifeColumn.
+     *
+     * @param i Indeks kolumny.
+     * @return Obiekt GameOfLifeColumn reprezentujący kolumnę o podanym indeksie.
+     */
+    public GameOfLifeColumn getColumn(int i) {
+        return columns.get(i);
+    }
+
+    /**
+     * Zwraca wiersz o indeksie i jako obiekt GameOfLifeRow.
+     *
+     * @param i Indeks wiersza.
+     * @return Obiekt GameOfLifeRow reprezentujący wiersz o podanym indeksie.
+     */
+    public GameOfLifeRow getRow(int i) {
+        return rows.get(i);
+    }
 }
