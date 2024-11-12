@@ -1,13 +1,10 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Klasa reprezentująca planszę do gry w życie.
  */
 public class GameOfLifeBoard {
-    private final List<List<GameOfLifeCell>> board;
+    private final GameOfLifeCell[][] board;
     private final List<GameOfLifeRow> rows;
     private final List<GameOfLifeColumn> columns;
     private final int rowsCount;
@@ -26,11 +23,7 @@ public class GameOfLifeBoard {
         Objects.requireNonNull(simulator);
         this.rowsCount = Math.max(rowsCount, 1);
         this.colsCount = Math.max(colsCount, 1);
-
-        this.board = new ArrayList<>(this.rowsCount);
-        for (int i = 0; i < this.rowsCount; i++) {
-            board.add(new ArrayList<>(this.colsCount));
-        }
+        this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
 
         this.rows = new ArrayList<>(this.rowsCount);
         this.columns = new ArrayList<>(this.colsCount);
@@ -63,22 +56,19 @@ public class GameOfLifeBoard {
         Collections.shuffle(allCells);
 
         for (int i = 0; i < rowsCount; i++) {
-            List<GameOfLifeCell> row = new ArrayList<>(colsCount);
             for (int j = 0; j < colsCount; j++) {
-                row.add(allCells.removeFirst());
+                board[i][j] = allCells.removeFirst();
             }
-            board.set(i, row);
-            rows.add(new GameOfLifeRow(row));
+            rows.add(new GameOfLifeRow(Arrays.asList(board[i])));
         }
 
         for (int j = 0; j < colsCount; j++) {
             List<GameOfLifeCell> column = new ArrayList<>(rowsCount);
             for (int i = 0; i < rowsCount; i++) {
-                column.add(board.get(i).get(j));
+                column.add(board[i][j]);
             }
             columns.add(new GameOfLifeColumn(column));
         }
-
         linkNeighbors();
     }
 
@@ -96,10 +86,10 @@ public class GameOfLifeBoard {
                         }
                         int ni = (i + x + rowsCount) % rowsCount;
                         int nj = (j + y + colsCount) % colsCount;
-                        neighbors.add(board.get(ni).get(nj));
+                        neighbors.add(board[ni][nj]);
                     }
                 }
-                board.get(i).get(j).setNeighbors(neighbors);
+                board[i][j].setNeighbors(neighbors);
             }
         }
     }
@@ -112,7 +102,7 @@ public class GameOfLifeBoard {
      * @return True, jeśli komórka jest żywa; false, jeśli jest martwa.
      */
     public boolean get(int x, int y) {
-        return board.get(x).get(y).getCellValue();
+        return board[x][y].getCellValue();
     }
 
     /**
@@ -123,7 +113,7 @@ public class GameOfLifeBoard {
      * @return GameOfLifeCell
      */
     public GameOfLifeCell getCell(int x, int y) {
-        return board.get(x).get(y);
+        return board[x][y];
     }
 
     /**
@@ -134,13 +124,7 @@ public class GameOfLifeBoard {
      * @param state Nowy stan komórki (true — żywa, false — martwa).
      */
     public void set(int x, int y, boolean state) {
-        board.get(x).get(y).updateState(state);
-        rows.set(x, new GameOfLifeRow(board.get(x)));
-        List<GameOfLifeCell> column = new ArrayList<>(rowsCount);
-        for (int i = 0; i < rowsCount; i++) {
-            column.add(board.get(i).get(y));
-        }
-        columns.set(y, new GameOfLifeColumn(column));
+        board[x][y].updateState(state);
     }
 
     /**
