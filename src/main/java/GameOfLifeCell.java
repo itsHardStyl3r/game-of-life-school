@@ -63,7 +63,7 @@ public class GameOfLifeCell {
     private int countLivingNeighbors() {
         int liveNeighbors = 0;
         for (GameOfLifeCell neighbor : neighbors) {
-            if (neighbor != null && neighbor.getCellValue()) {
+            if (neighbor.getCellValue()) {
                 liveNeighbors++;
             }
         }
