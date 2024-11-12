@@ -1,10 +1,18 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOfLifeCellTest {
+    private GameOfLifeCell cell;
+
+    @BeforeEach
+    public void setUp() {
+        cell = new GameOfLifeCell(false);
+    }
 
     /**
      * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
@@ -23,7 +31,7 @@ public class GameOfLifeCellTest {
     }
 
     /**
-     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
+     * Test sprawdzający czy po ustawieniu sąsiadów ich liczba jest równa 8
      */
     @Test
     public void testArrayLength() {
@@ -54,6 +62,78 @@ public class GameOfLifeCellTest {
         // Sprawdzenie, czy sąsiedzi zostali poprawnie ustawieni, gdy tablica ma dokładnie 8 elementów
         assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");
         assertEquals(8, neighborsValue.size(), "Tablica sąsiadów powinna mieć 8 elementów");
+    }
+
+    /**
+     * Test sprawdzający metode nextState() dla komórki martwej.
+     */
+    @Test
+    public void testNextStateDeadCells() {
+        // Tworzymy 3 żywych sąsiadów
+        GameOfLifeCell aliveNeighbor = new GameOfLifeCell(true);
+
+        // Ustawiamy sąsiadów komórki (3 żywi sąsiedzi)
+        cell.setNeighbors(Arrays.asList(aliveNeighbor, aliveNeighbor, aliveNeighbor,
+                new GameOfLifeCell(false), new GameOfLifeCell(false),
+                new GameOfLifeCell(false), new GameOfLifeCell(false), new GameOfLifeCell(false)));
+
+        // Sprawdzamy, czy komórka przeżyje (powinna stać się żywa, jeśli ma dokładnie 3 żywych sąsiadów)
+        boolean nextState = cell.nextState();
+
+        assertTrue(nextState, "Komórka martwa powinna stać się żywa, jeśli ma 3 żywych sąsiadów");
+    }
+
+    /**
+     * Test sprawdzający metode nextState() dla komórki żywej.
+     */
+    @Test
+    public void testNextStateAliveCell() {
+        GameOfLifeCell aliveNeighbor = new GameOfLifeCell(true);
+
+        cell.updateState(true);
+        cell.setNeighbors(Arrays.asList(aliveNeighbor, aliveNeighbor, new GameOfLifeCell(false),
+                new GameOfLifeCell(false), new GameOfLifeCell(false),
+                new GameOfLifeCell(false), new GameOfLifeCell(false), new GameOfLifeCell(false)));
+
+        boolean nextState = cell.nextState();
+
+        assertTrue(nextState, "Komórka żywa powinna przeżyć, jeśli ma 2 lub 3 żywych sąsiadów");
+    }
+
+    /**
+     * Test sprawdzający, czy komórka martwa nie zmienia stanu, jeśli ma innych sąsiadów niż 3 żywych.
+     */
+    @Test
+    public void testNextStateDeadCellWithTwoAlive() {
+        GameOfLifeCell aliveNeighbor = new GameOfLifeCell(true);
+
+        cell.setNeighbors(Arrays.asList(aliveNeighbor, aliveNeighbor, new GameOfLifeCell(false),
+                new GameOfLifeCell(false), new GameOfLifeCell(false),
+                new GameOfLifeCell(false), new GameOfLifeCell(false), new GameOfLifeCell(false)));
+
+        boolean nextState = cell.nextState();
+
+        assertFalse(nextState, "Komórka martwa nie powinna stać się żywa, jeśli ma mniej niż 3 żywych sąsiadów");
+    }
+
+    /**
+     * Test sprawdzający wyjątek przy ustawianiu sąsiadów.
+     */
+    @Test
+    public void testSizeWithInvalidSize() {
+        assertThrows(IllegalArgumentException.class, () -> cell.setNeighbors(Arrays.asList(new GameOfLifeCell(true), new GameOfLifeCell(false))), "Powinien zostać rzucony wyjątek, gdy lista sąsiadów ma mniej niż 8 elementów.");
+    }
+
+    /**
+     * Test sprawdzający, czy komórka może mieć dokładnie 8 sąsiadów.
+     */
+    @Test
+    public void testValidSize() {
+        // Próba ustawienia sąsiadów z listą o właściwej długości
+        assertDoesNotThrow(() -> cell.setNeighbors(Arrays.asList(
+                new GameOfLifeCell(false), new GameOfLifeCell(true), new GameOfLifeCell(false),
+                new GameOfLifeCell(false), new GameOfLifeCell(true), new GameOfLifeCell(false),
+                new GameOfLifeCell(true), new GameOfLifeCell(false))), "Powinno być możliwe ustawienie 8 sąsiadów");
     }
 
 }
