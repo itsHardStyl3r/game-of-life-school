@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Klasa reprezentująca planszę do gry w życie.
@@ -36,15 +39,33 @@ public class GameOfLifeBoard {
     }
 
     /**
-     * Inicjalizuje planszę losowymi wartościami komórek oraz
-     * tworzy obiekty {@link GameOfLifeRow} i {@link GameOfLifeColumn} dla każdego wiersza i kolumny.
+     * Inicjalizuje planszę losowymi wartościami komórek
+     * Korzysta z `Collections.shuffle()` do losowego ustawienia stanu komórek
      */
     private void initializeBoard() {
-        Random random = new Random();
+        List<GameOfLifeCell> allCells = new ArrayList<>(rowsCount * colsCount);
+
+        // Określamy liczbę żywych i martwych komórek
+        int aliveCount = (rowsCount * colsCount) / 2;
+        int deadCount = (rowsCount * colsCount) - aliveCount;
+
+        // Dodajemy komórki żywe
+        for (int i = 0; i < aliveCount; i++) {
+            allCells.add(new GameOfLifeCell(true));
+        }
+
+        // Dodajemy komórki martwe
+        for (int i = 0; i < deadCount; i++) {
+            allCells.add(new GameOfLifeCell(false));
+        }
+
+        // Losowe przetasowanie komórek na planszy
+        Collections.shuffle(allCells);
+
         for (int i = 0; i < rowsCount; i++) {
             List<GameOfLifeCell> row = new ArrayList<>(colsCount);
             for (int j = 0; j < colsCount; j++) {
-                row.add(new GameOfLifeCell(random.nextBoolean()));
+                row.add(allCells.removeFirst());
             }
             board.set(i, row);
             rows.add(new GameOfLifeRow(row));
