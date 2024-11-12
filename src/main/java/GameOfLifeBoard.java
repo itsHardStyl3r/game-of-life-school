@@ -46,7 +46,7 @@ public class GameOfLifeBoard {
         List<GameOfLifeCell> allCells = new ArrayList<>(rowsCount * colsCount);
 
         // Określamy liczbę żywych i martwych komórek
-        int aliveCount = (rowsCount * colsCount) / 2;
+        int aliveCount = rowsCount * colsCount / 2;
         int deadCount = (rowsCount * colsCount) - aliveCount;
 
         // Dodajemy komórki żywe
