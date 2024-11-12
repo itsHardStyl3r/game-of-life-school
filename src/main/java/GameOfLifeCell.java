@@ -1,4 +1,6 @@
-import java.util.Arrays;
+import org.apache.commons.collections4.list.FixedSizeList;
+
+import java.util.List;
 
 /**
  * Reprezentuje pojedynczą komórkę w grze w życie.
@@ -7,7 +9,7 @@ import java.util.Arrays;
  */
 public class GameOfLifeCell {
     private boolean value;
-    private GameOfLifeCell[] neighbors;
+    private List<GameOfLifeCell> neighbors;
 
     /**
      * Tworzy nową komórkę z określonym stanem.
@@ -16,7 +18,6 @@ public class GameOfLifeCell {
      */
     public GameOfLifeCell(boolean value) {
         this.value = value;
-        this.neighbors = new GameOfLifeCell[8];
     }
 
     /**
@@ -52,19 +53,8 @@ public class GameOfLifeCell {
     }
 
     /**
-     * Ustawia sąsiadów komórki. Metoda przyjmuje tablicę dokładnie 8 "komórek sąsiadów".
-     *
-     * @param neighbors Tablica 8 sąsiednich komórek typu GameOfLifeCell.
-     */
-    public void setNeighbors(GameOfLifeCell[] neighbors) {
-        if (neighbors.length == 8) {
-            this.neighbors = Arrays.copyOf(neighbors, 8);
-        }
-    }
-
-    /**
      * Zlicza liczbę żywych sąsiadów wokół tej komórki.
-     * Metoda przechodzi przez tablicę `neighbors` i zwiększa
+     * Metoda przechodzi przez listę `neighbors` i zwiększa
      * licznik `liveNeighbors` dla każdego niepustego sąsiada, który jest żywy.
      *
      * @return liczba żywych sąsiadów wokół tej komórki
@@ -72,14 +62,27 @@ public class GameOfLifeCell {
     private int countLivingNeighbors() {
         int liveNeighbors = 0;
         for (GameOfLifeCell neighbor : neighbors) {
-            if (neighbor != null && neighbor.getCellValue()) {
+            if (neighbor.getCellValue()) {
                 liveNeighbors++;
             }
         }
         return liveNeighbors;
     }
 
-    GameOfLifeCell[] getNeighbors() {
-        return Arrays.copyOf(neighbors, neighbors.length);
+    public List<GameOfLifeCell> getNeighbors() {
+        return List.copyOf(neighbors);
+    }
+
+    /**
+     * Ustawia sąsiadów komórki. Metoda przyjmuje listę dokładnie 8 "komórek sąsiadów".
+     *
+     * @param neighbors Lista 8 sąsiednich komórek typu GameOfLifeCell.
+     * @throws IllegalArgumentException Gdy rozmiar listy sąsiadów nie wynosi 8.
+     */
+    public void setNeighbors(List<GameOfLifeCell> neighbors) throws IllegalArgumentException {
+        if (neighbors.size() != 8) {
+            throw new IllegalArgumentException("Rozmiar sąsiadów musi wynosić 8.");
+        }
+        this.neighbors = FixedSizeList.fixedSizeList(neighbors);
     }
 }

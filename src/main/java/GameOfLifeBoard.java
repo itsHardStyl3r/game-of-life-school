@@ -1,14 +1,14 @@
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import org.apache.commons.collections4.list.FixedSizeList;
+
+import java.util.*;
 
 /**
  * Klasa reprezentująca planszę do gry w życie.
  */
 public class GameOfLifeBoard {
     private final GameOfLifeCell[][] board;
-    private final GameOfLifeRow[] rows;
-    private final GameOfLifeColumn[] columns;
+    private List<GameOfLifeRow> rows;
+    private List<GameOfLifeColumn> columns;
     private final int rowsCount;
     private final int colsCount;
     private final GameOfLifeSimulator simulator;
@@ -26,31 +26,53 @@ public class GameOfLifeBoard {
         this.rowsCount = Math.max(rowsCount, 1);
         this.colsCount = Math.max(colsCount, 1);
         this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
-        this.rows = new GameOfLifeRow[this.rowsCount];
-        this.columns = new GameOfLifeColumn[this.colsCount];
+
+        this.rows = new ArrayList<>(this.rowsCount);
+        this.columns = new ArrayList<>(this.colsCount);
         this.simulator = simulator;
         initializeBoard();
     }
 
     /**
-     * Inicjalizuje planszę losowymi wartościami komórek oraz
-     * tworzy obiekty {@link GameOfLifeRow} i {@link GameOfLifeColumn} dla każdego wiersza i kolumny.
+     * Inicjalizuje planszę losowymi wartościami komórek
+     * Korzysta z `Collections.shuffle()` do losowego ustawienia stanu komórek
      */
     private void initializeBoard() {
-        Random random = new Random();
+        List<GameOfLifeCell> allCells = new ArrayList<>(rowsCount * colsCount);
+
+        // Określamy liczbę żywych i martwych komórek
+        int aliveCount = rowsCount * colsCount / 2;
+        int deadCount = (rowsCount * colsCount) - aliveCount;
+
+        // Dodajemy komórki żywe
+        for (int i = 0; i < aliveCount; i++) {
+            allCells.add(new GameOfLifeCell(true));
+        }
+
+        // Dodajemy komórki martwe
+        for (int i = 0; i < deadCount; i++) {
+            allCells.add(new GameOfLifeCell(false));
+        }
+
+        // Losowe przetasowanie komórek na planszy
+        Collections.shuffle(allCells);
+
         for (int i = 0; i < rowsCount; i++) {
             for (int j = 0; j < colsCount; j++) {
-                board[i][j] = new GameOfLifeCell(random.nextBoolean());
+                board[i][j] = allCells.removeFirst();
             }
-            rows[i] = new GameOfLifeRow(board[i]);
+            rows.add(new GameOfLifeRow(Arrays.asList(board[i])));
         }
+
         for (int j = 0; j < colsCount; j++) {
-            GameOfLifeCell[] column = new GameOfLifeCell[rowsCount];
+            List<GameOfLifeCell> column = new ArrayList<>(rowsCount);
             for (int i = 0; i < rowsCount; i++) {
-                column[i] = board[i][j];
+                column.add(board[i][j]);
             }
-            columns[j] = new GameOfLifeColumn(column);
+            columns.add(new GameOfLifeColumn(column));
         }
+        rows = FixedSizeList.fixedSizeList(rows);
+        columns = FixedSizeList.fixedSizeList(columns);
         linkNeighbors();
     }
 
@@ -60,8 +82,7 @@ public class GameOfLifeBoard {
     private void linkNeighbors() {
         for (int i = 0; i < rowsCount; i++) {
             for (int j = 0; j < colsCount; j++) {
-                GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
-                int idx = 0;
+                List<GameOfLifeCell> neighbors = new ArrayList<>(8);
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {
                         if (x == 0 && y == 0) {
@@ -69,7 +90,7 @@ public class GameOfLifeBoard {
                         }
                         int ni = (i + x + rowsCount) % rowsCount;
                         int nj = (j + y + colsCount) % colsCount;
-                        neighbors[idx++] = board[ni][nj];
+                        neighbors.add(board[ni][nj]);
                     }
                 }
                 board[i][j].setNeighbors(neighbors);
@@ -102,36 +123,30 @@ public class GameOfLifeBoard {
     /**
      * Ustawia nowy stan komórki na danej pozycji.
      *
-     * @param x Indeks wiersza.
-     * @param y Indeks kolumny.
+     * @param x     Indeks wiersza.
+     * @param y     Indeks kolumny.
      * @param state Nowy stan komórki (true — żywa, false — martwa).
      */
     public void set(int x, int y, boolean state) {
         board[x][y].updateState(state);
-        rows[x] = new GameOfLifeRow(board[x]);
-        GameOfLifeCell[] column = new GameOfLifeCell[rowsCount];
-        for (int i = 0; i < rowsCount; i++) {
-            column[i] = board[i][y];
-        }
-        columns[y] = new GameOfLifeColumn(column);
     }
 
     /**
-     * Zwraca kopię tablicy obiektów {@link GameOfLifeRow}.
+     * Zwraca listę obiektów {@link GameOfLifeRow}.
      *
-     * @return Kopia tablicy rzędów planszy.
+     * @return Kopia listy rzędów planszy.
      */
-    public GameOfLifeRow[] getRows() {
-        return Arrays.copyOf(rows, rows.length);
+    public List<GameOfLifeRow> getRows() {
+        return rows;
     }
 
     /**
-     * Zwraca kopię tablicy obiektów {@link GameOfLifeColumn}.
+     * Zwraca listę obiektów {@link GameOfLifeColumn}.
      *
-     * @return Kopia tablicy kolumn planszy.
+     * @return Kopia listy kolumn planszy.
      */
-    public GameOfLifeColumn[] getColumns() {
-        return Arrays.copyOf(columns, columns.length);
+    public List<GameOfLifeColumn> getColumns() {
+        return columns;
     }
 
     /**
@@ -139,5 +154,25 @@ public class GameOfLifeBoard {
      */
     public void doSimulationStep() {
         simulator.doStep(this);
+    }
+
+    /**
+     * Zwraca kolumnę o indeksie i jako obiekt GameOfLifeColumn.
+     *
+     * @param i Indeks kolumny.
+     * @return Obiekt GameOfLifeColumn reprezentujący kolumnę o podanym indeksie.
+     */
+    public GameOfLifeColumn getColumn(int i) {
+        return columns.get(i);
+    }
+
+    /**
+     * Zwraca wiersz o indeksie i jako obiekt GameOfLifeRow.
+     *
+     * @param i Indeks wiersza.
+     * @return Obiekt GameOfLifeRow reprezentujący wiersz o podanym indeksie.
+     */
+    public GameOfLifeRow getRow(int i) {
+        return rows.get(i);
     }
 }

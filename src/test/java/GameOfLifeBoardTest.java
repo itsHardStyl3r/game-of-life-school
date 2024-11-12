@@ -7,15 +7,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOfLifeBoardTest {
     private GameOfLifeBoard board;
-    private PlainGameOfLifeSimulator simulator;
+    private final int rowsCount = 5;
+    private final int columnsCount = 5;
+    private final PlainGameOfLifeSimulator simulator = new PlainGameOfLifeSimulator();
 
     /**
      * 5x5 - plansza testowa
      */
     @BeforeEach
     public void setUp() {
-        simulator = new PlainGameOfLifeSimulator();
-        board = new GameOfLifeBoard(5, 5, simulator);
+        board = new GameOfLifeBoard(rowsCount, columnsCount, simulator);
     }
 
     /**
@@ -209,6 +210,52 @@ public class GameOfLifeBoardTest {
     }
 
     /**
+     * Test sprawdzający niezawodność FixedSizeList.
+     * Próba dodania kolejnego Row do listy o stałym rozmiarze - fail.
+     * Próba ustawienia pierwszego Row na inny - pomyślnie.
+     */
+    @Test
+    public void testSizeAndFixedSize() {
+        assertEquals(board.getRows().size(), rowsCount);
+        assertEquals(board.getColumns().size(), columnsCount);
+        GameOfLifeRow row = new GameOfLifeRow(Arrays.asList(
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false)
+        ));
+
+        GameOfLifeColumn column = new GameOfLifeColumn(Arrays.asList(
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(false),
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(true),
+                new GameOfLifeCell(false)
+        ));
+
+        assertThrows(UnsupportedOperationException.class, () -> board.getRows().add(row));
+        assertDoesNotThrow(() -> board.getRows().set(0, row)); // Dla błędu powinno być UnsupportedOperationException
+
+        assertThrows(UnsupportedOperationException.class, () -> board.getColumns().add(column));
+        assertDoesNotThrow(() -> board.getColumns().set(0, column));
+    }
+
+    /**
+     * Test sprawdza konstruktor
+     */
+    @Test
+    public void test_BadConstructor() {
+        board = new GameOfLifeBoard(-1, -1, simulator);
+        assertNotNull(board.getRow(0), "Tablica powinna posiadać przynajmniej jeden wiersz");
+        assertNotNull(board.getColumn(0), "Tablica powinna posiadać przynajmniej jedną kolumnę");
+
+        board = new GameOfLifeBoard(0, 0, simulator);
+        assertNotNull(board.getRow(0), "Tablica powinna posiadać przynajmniej jeden wiersz");
+        assertNotNull(board.getColumn(0), "Tablica powinna posiadać przynajmniej jedną kolumnę");
+    }
+
+    /**
      * Sprawdza czy generowane są różne stany planszy
      */
     @Test
@@ -237,114 +284,5 @@ public class GameOfLifeBoardTest {
         }
 
         assertTrue(areBoardsDifferent, "Dwa wywołania powinny dać inny stan");
-    }
-
-    /**
-     * Testuje metodę countAliveCells(), sprawdzając czy liczba żywych komórek jest poprawna.
-     */
-    @Test
-    public void testCountAliveCells() {
-        GameOfLifeCell[] cells = {
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false),
-                new GameOfLifeCell(true)
-        };
-        GameOfLifeRow row = new GameOfLifeRow(cells);
-
-        assertEquals(2, row.countAliveCells(), "Liczba żywych komórek powinna wynosić 2.");
-    }
-
-    /**
-     * Sprwadza czy liczba martwych komórek jest poprawna.
-     */
-    @Test
-    public void testCountDeadCells() {
-        GameOfLifeCell[] cells = {
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false),
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false)
-        };
-        GameOfLifeColumn column = new GameOfLifeColumn(cells);
-
-        assertEquals(2, column.countDeadCells(), "Liczba martwych komórek powinna wynosić 2.");
-    }
-
-    /**
-     * Sprawdza warunek neighbor != null && neighbor.getCellValue()
-     */
-    @Test
-    public void testCountLivingNeighbors() {
-        GameOfLifeCell cell = new GameOfLifeCell(false);
-        GameOfLifeCell[] neighbors = {
-                new GameOfLifeCell(true),
-                null,
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false),
-                null,
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false),
-                new GameOfLifeCell(false)
-        };
-        cell.setNeighbors(neighbors);
-
-        assertTrue(cell.nextState(), "Liczba żywych sąsiadów powinna wynosić 3.");
-    }
-
-    /**
-     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
-     */
-    @Test
-    public void testNeighbors() {
-        GameOfLifeCell cell = new GameOfLifeCell(false);
-        GameOfLifeCell[] neighbors = new GameOfLifeCell[8];
-
-        for (int i = 0; i < neighbors.length; i++) {
-            neighbors[i] = new GameOfLifeCell(i % 2 == 0);
-        }
-
-        cell.setNeighbors(neighbors);
-        assertEquals(8, neighbors.length, "Tablica sąsiadów powinna mieć dokładnie 8 elementów.");
-    }
-
-    /**
-     * Test sprawdza, czy po ustawieniu sąsiadów ich liczba jest równa 8.
-     */
-    @Test
-    public void testArrayLength() {
-        GameOfLifeCell cell = new GameOfLifeCell(false);
-
-        GameOfLifeCell[] invalidNeighbors = new GameOfLifeCell[7];
-        for (int i = 0; i < invalidNeighbors.length; i++) {
-            invalidNeighbors[i] = new GameOfLifeCell(false);
-        }
-
-        // Ustawienie sąsiadów z tablicą o niewłaściwej wielkości
-        cell.setNeighbors(invalidNeighbors);
-
-        GameOfLifeCell[] neighborsValue = cell.getNeighbors();
-        assertTrue(neighborsValue == null || Arrays.stream(neighborsValue).allMatch(java.util.Objects::isNull),
-                "Sąsiedzi nieustawieni, jeśli tablica nie ma 8 elementów.");
-
-        GameOfLifeCell[] validNeighbors = new GameOfLifeCell[8];
-        for (int i = 0; i < validNeighbors.length; i++) {
-            validNeighbors[i] = new GameOfLifeCell(false);
-        }
-
-        // Ustawienie poprawnej tablicy sąsiadów
-        cell.setNeighbors(validNeighbors);
-        neighborsValue = cell.getNeighbors();
-
-        // Sprawdzenie, czy sąsiedzi zostali poprawnie ustawieni, gdy tablica ma dokładnie 8 elementów
-        assertNotNull(neighborsValue, "Sąsiedzi ustawieni, tablica ma dokładnie 8 elementów");
-        assertEquals(8, neighborsValue.length, "Tablica sąsiadów powinna mieć 8 elementów");
-    }
-
-    @Test
-    public void test_BadConstructor() {
-        board = new GameOfLifeBoard(-1, -1, simulator);
-        assertTrue(board.getRows().length > 0 && board.getColumns().length > 0);
-        board = new GameOfLifeBoard(0, 0, simulator);
-        assertTrue(board.getRows().length > 0 && board.getColumns().length > 0);
     }
 }

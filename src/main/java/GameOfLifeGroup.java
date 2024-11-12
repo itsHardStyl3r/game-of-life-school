@@ -1,19 +1,21 @@
+import java.util.List;
+
 /**
  * Abstrakcyjna klasa reprezentująca grupę komórek w grze w życie.
- * Klasa `GameOfLifeGroup` przechowuje tablicę `cells`, która reprezentuje
+ * Klasa `GameOfLifeGroup` przechowuje listę `cells`, która reprezentuje
  * grupę komórek. Zawiera metody do liczenia liczby żywych oraz martwych
  * komórek w tej grupie.
  */
 public abstract class GameOfLifeGroup {
-    protected final GameOfLifeCell[] cells;
+    protected final List<GameOfLifeCell> cells;
 
-    public GameOfLifeGroup(GameOfLifeCell[] cells) {
+    public GameOfLifeGroup(List<GameOfLifeCell> cells) {
         this.cells = cells;
     }
 
     /**
      * Liczy liczbę żywych komórek w grupie.
-     * Przechodzi przez wszystkie komórki w tablicy `cells` i zlicza te,
+     * Przechodzi przez wszystkie komórki w liście `cells` i zlicza te,
      * które są żywe (posiadają wartość true).
      *
      * @return liczba żywych komórek w grupie
@@ -36,6 +38,6 @@ public abstract class GameOfLifeGroup {
      * @return liczba martwych komórek w grupie
      */
     public int countDeadCells() {
-        return cells.length - countAliveCells();
+        return cells.size() - countAliveCells();
     }
 }
