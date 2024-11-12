@@ -9,13 +9,13 @@ public class GameOfLifeBoardTest {
     private GameOfLifeBoard board;
     private final int rowsCount = 5;
     private final int columnsCount = 5;
+    private final PlainGameOfLifeSimulator simulator = new PlainGameOfLifeSimulator();
 
     /**
      * 5x5 - plansza testowa
      */
     @BeforeEach
     public void setUp() {
-        PlainGameOfLifeSimulator simulator = new PlainGameOfLifeSimulator();
         board = new GameOfLifeBoard(rowsCount, columnsCount, simulator);
     }
 
@@ -239,5 +239,50 @@ public class GameOfLifeBoardTest {
 
         assertThrows(UnsupportedOperationException.class, () -> board.getColumns().add(column));
         assertDoesNotThrow(() -> board.getColumns().set(0, column));
+    }
+
+    /**
+     * Test sprawdza konstruktor
+     */
+    @Test
+    public void test_BadConstructor() {
+        board = new GameOfLifeBoard(-1, -1, simulator);
+        assertNotNull(board.getRow(0), "Tablica powinna posiadać przynajmniej jeden wiersz");
+        assertNotNull(board.getColumn(0), "Tablica powinna posiadać przynajmniej jedną kolumnę");
+
+        board = new GameOfLifeBoard(0, 0, simulator);
+        assertNotNull(board.getRow(0), "Tablica powinna posiadać przynajmniej jeden wiersz");
+        assertNotNull(board.getColumn(0), "Tablica powinna posiadać przynajmniej jedną kolumnę");
+    }
+
+    /**
+     * Sprawdza czy generowane są różne stany planszy
+     */
+    @Test
+    public void testRandomBoard() {
+        GameOfLifeBoard board1 = new GameOfLifeBoard(5, 5, simulator);
+        GameOfLifeBoard board2 = new GameOfLifeBoard(5, 5, simulator);
+
+        boolean[][] initialBoard1 = new boolean[5][5];
+        boolean[][] initialBoard2 = new boolean[5][5];
+
+        // Uzupełniamy tablice do sprawdzenia różnic
+        for (int i = 0; i < initialBoard1.length; i++) {
+            for (int j = 0; j < initialBoard1[i].length; j++) {
+                initialBoard1[i][j] = board1.get(i, j);
+                initialBoard2[i][j] = board2.get(i, j);
+            }
+        }
+
+        // Zakładamy, że plansze nie będą takie same
+        boolean areBoardsDifferent = false;
+        for (int i = 0; i < initialBoard1.length; i++) {
+            if (!Arrays.equals(initialBoard1[i], initialBoard2[i])) {
+                areBoardsDifferent = true;
+                break;
+            }
+        }
+
+        assertTrue(areBoardsDifferent, "Dwa wywołania powinny dać inny stan");
     }
 }
