@@ -1,5 +1,5 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import org.apache.commons.collections4.list.FixedSizeList;
+
 import java.util.List;
 
 /**
@@ -18,7 +18,6 @@ public class GameOfLifeCell {
      */
     public GameOfLifeCell(boolean value) {
         this.value = value;
-        this.neighbors = new ArrayList<>(8);
     }
 
     /**
@@ -71,7 +70,7 @@ public class GameOfLifeCell {
     }
 
     public List<GameOfLifeCell> getNeighbors() {
-        return Collections.unmodifiableList(neighbors);
+        return List.copyOf(neighbors);
     }
 
     /**
@@ -84,6 +83,6 @@ public class GameOfLifeCell {
         if (neighbors.size() != 8) {
             throw new IllegalArgumentException("Rozmiar sąsiadów musi wynosić 8.");
         }
-        this.neighbors = new ArrayList<>(neighbors);
+        this.neighbors = FixedSizeList.fixedSizeList(neighbors);
     }
 }

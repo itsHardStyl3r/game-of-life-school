@@ -1,3 +1,5 @@
+import org.apache.commons.collections4.list.FixedSizeList;
+
 import java.util.*;
 
 /**
@@ -5,8 +7,8 @@ import java.util.*;
  */
 public class GameOfLifeBoard {
     private final GameOfLifeCell[][] board;
-    private final List<GameOfLifeRow> rows;
-    private final List<GameOfLifeColumn> columns;
+    private List<GameOfLifeRow> rows;
+    private List<GameOfLifeColumn> columns;
     private final int rowsCount;
     private final int colsCount;
     private final GameOfLifeSimulator simulator;
@@ -69,6 +71,8 @@ public class GameOfLifeBoard {
             }
             columns.add(new GameOfLifeColumn(column));
         }
+        rows = FixedSizeList.fixedSizeList(rows);
+        columns = FixedSizeList.fixedSizeList(columns);
         linkNeighbors();
     }
 
@@ -128,21 +132,21 @@ public class GameOfLifeBoard {
     }
 
     /**
-     * Zwraca kopię listy obiektów {@link GameOfLifeRow}.
+     * Zwraca listę obiektów {@link GameOfLifeRow}.
      *
      * @return Kopia listy rzędów planszy.
      */
     public List<GameOfLifeRow> getRows() {
-        return Collections.unmodifiableList(rows);
+        return rows;
     }
 
     /**
-     * Zwraca kopię listy obiektów {@link GameOfLifeColumn}.
+     * Zwraca listę obiektów {@link GameOfLifeColumn}.
      *
      * @return Kopia listy kolumn planszy.
      */
     public List<GameOfLifeColumn> getColumns() {
-        return Collections.unmodifiableList(columns);
+        return columns;
     }
 
     /**
