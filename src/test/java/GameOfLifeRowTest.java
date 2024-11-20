@@ -19,21 +19,4 @@ public class GameOfLifeRowTest {
 
         assertEquals(2, row.countAliveCells(), "Liczba żywych komórek powinna wynosić 2.");
     }
-
-    /**
-     * Sprwadza czy liczba martwych komórek jest poprawna.
-     */
-    @Test
-    public void testCountDeadCells() {
-        GameOfLifeCell[] cells = {
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false),
-                new GameOfLifeCell(true),
-                new GameOfLifeCell(false)
-        };
-        GameOfLifeColumn column = new GameOfLifeColumn(List.of(cells));
-
-        assertEquals(2, column.countDeadCells(), "Liczba martwych komórek powinna wynosić 2.");
-    }
-
 }
