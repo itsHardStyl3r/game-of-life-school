@@ -136,4 +136,48 @@ public class GameOfLifeCellTest {
                 new GameOfLifeCell(true), new GameOfLifeCell(false))), "Powinno być możliwe ustawienie 8 sąsiadów");
     }
 
+    /**
+     * Test sprawdzający equals, hashcode i toString.
+     * SuppressWarnings dla coverage dla equals():
+     * - (this == obj)
+     * - (getClass() != obj.getClass())
+     */
+    @SuppressWarnings({
+            "EqualsWithItself",
+            "SimplifiableAssertion",
+            "EqualsBetweenInconvertibleTypes",
+            "ConstantValue"})
+    @Test
+    void testEqualsAndHashCode() {
+        GameOfLifeCell cell1 = new GameOfLifeCell(true);
+        GameOfLifeCell cell2 = new GameOfLifeCell(true);
+        GameOfLifeCell cell3 = new GameOfLifeCell(false);
+
+        cell1.setNeighbors(List.of(cell2, cell3, cell1, cell2, cell3, cell1, cell2, cell3));
+        cell2.setNeighbors(List.of(cell1, cell3, cell1, cell2, cell3, cell1, cell2, cell3));
+        cell3.setNeighbors(List.of(cell1, cell2, cell1, cell2, cell3, cell1, cell2, cell3));
+
+        // Sprawdzenie z samym sobą (this == obj)
+        assertEquals(cell1, cell1);
+        assertEquals(cell2, cell2);
+        assertEquals(cell3, cell3);
+        assertEquals(cell1.toString(), cell1.toString());
+        assertEquals(cell2.toString(), cell2.toString());
+        assertEquals(cell3.toString(), cell3.toString());
+
+        // Sprawdzenie z innymi
+        assertEquals(cell1, cell2);
+        assertNotEquals(cell1, cell3);
+        assertEquals(cell1.hashCode(), cell2.hashCode());
+        assertNotEquals(cell1.hashCode(), cell3.hashCode());
+        assertEquals(cell1.toString(), cell2.toString());
+        assertNotEquals(cell1.toString(), cell3.toString());
+
+        assertFalse(cell1.equals("ABC"));
+        assertFalse(cell1.equals(null));
+        assertFalse(cell2.equals("ABC"));
+        assertFalse(cell2.equals(null));
+        assertFalse(cell3.equals("ABC"));
+        assertFalse(cell3.equals(null));
+    }
 }
