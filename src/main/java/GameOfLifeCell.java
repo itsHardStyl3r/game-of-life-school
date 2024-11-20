@@ -1,4 +1,8 @@
 import org.apache.commons.collections4.list.FixedSizeList;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
 
@@ -84,5 +88,39 @@ public class GameOfLifeCell {
             throw new IllegalArgumentException("Rozmiar sąsiadów musi wynosić 8.");
         }
         this.neighbors = FixedSizeList.fixedSizeList(neighbors);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        GameOfLifeCell that = (GameOfLifeCell) obj;
+        return new EqualsBuilder()
+                .append(value, that.value)
+                .append(neighbors.size(), that.neighbors.size())
+                .append(countLivingNeighbors(), that.countLivingNeighbors())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(value)
+                .append(neighbors.size())
+                .append(countLivingNeighbors())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+                .append("value", value)
+                .append("neighborsCount", neighbors.size())
+                .append("livingNeighbors", countLivingNeighbors())
+                .toString();
     }
 }

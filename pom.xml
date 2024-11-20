@@ -29,8 +29,8 @@
 
     <licenses>
         <license>
-            <name>MIT License</name>
-            <url>https://mit-license.org/</url>
+            <name>GPL 3.0 License</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -98,7 +98,6 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>4.0.0-M13</version>
             </plugin>
-
         </plugins>
     </build>
     <reporting>
@@ -162,6 +161,16 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>22.0.1</version>
         </dependency>
     </dependencies>
 </project>

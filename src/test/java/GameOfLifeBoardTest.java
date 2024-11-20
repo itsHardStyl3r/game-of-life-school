@@ -2,14 +2,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOfLifeBoardTest {
-    private GameOfLifeBoard board;
     private final int rowsCount = 5;
     private final int columnsCount = 5;
     private final PlainGameOfLifeSimulator simulator = new PlainGameOfLifeSimulator();
+    private GameOfLifeBoard board;
 
     /**
      * 5x5 - plansza testowa
@@ -285,4 +287,62 @@ public class GameOfLifeBoardTest {
 
         assertTrue(areBoardsDifferent, "Dwa wywołania powinny dać inny stan");
     }
+
+    /**
+     * Test sprawdzający equals, hashcode i toString.
+     * SuppressWarnings dla coverage dla equals():
+     * - (this == obj)
+     * - (getClass() != obj.getClass())
+     */
+    @SuppressWarnings({
+            "EqualsWithItself",
+            "SimplifiableAssertion",
+            "EqualsBetweenInconvertibleTypes",
+            "ConstantValue"})
+    @Test
+    void testEqualsAndHashCode() {
+        boolean[][] initialBoard1 = {
+                {false, false, false},
+                {false, false, true},
+                {false, true, true},
+        };
+        boolean[][] initialBoard2 = {
+                {false, false, false},
+                {true, true, true},
+                {false, true, false},
+        };
+        GameOfLifeBoard board1 = new GameOfLifeBoard(3, 3, simulator);
+        GameOfLifeBoard board2 = new GameOfLifeBoard(3, 3, simulator);
+        GameOfLifeBoard board3 = new GameOfLifeBoard(3, 3, simulator);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board1.set(i, j, initialBoard1[i][j]);
+                board2.set(i, j, initialBoard1[i][j]);
+                board3.set(i, j, initialBoard2[i][j]);
+            }
+        }
+
+        assertEquals(board1, board1);
+        assertEquals(board2, board2);
+        assertEquals(board3, board3);
+        assertEquals(board1.toString(), board1.toString());
+        assertEquals(board2.toString(), board2.toString());
+        assertEquals(board3.toString(), board3.toString());
+
+        assertEquals(board1, board2);
+        assertNotEquals(board1, board3);
+        assertEquals(board1.hashCode(), board2.hashCode());
+        assertNotEquals(board1.hashCode(), board3.hashCode());
+
+        assertEquals(board1.toString(), board2.toString());
+        assertNotEquals(board1.toString(), board3.toString());
+
+        assertFalse(board1.equals("ABC"));
+        assertFalse(board1.equals(null));
+        assertFalse(board2.equals("ABC"));
+        assertFalse(board2.equals(null));
+        assertFalse(board3.equals("ABC"));
+        assertFalse(board3.equals(null));
+    }
 }
+

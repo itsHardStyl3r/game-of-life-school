@@ -1,3 +1,8 @@
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.List;
 
 /**
@@ -40,4 +45,39 @@ public abstract class GameOfLifeGroup {
     public int countDeadCells() {
         return cells.size() - countAliveCells();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        GameOfLifeGroup that = (GameOfLifeGroup) obj;
+        return new EqualsBuilder()
+                .append(cells, that.cells)
+                .append(cells.size(), that.cells.size())
+                .append(countAliveCells(), that.countAliveCells())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(cells)
+                .append(cells.size())
+                .append(countAliveCells())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+                .append(cells)
+                .append(cells.size())
+                .append(countAliveCells())
+                .toString();
+    }
 }
+

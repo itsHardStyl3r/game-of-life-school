@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameOfLifeRowTest {
     /**
@@ -20,20 +20,16 @@ public class GameOfLifeRowTest {
         assertEquals(2, row.countAliveCells(), "Liczba żywych komórek powinna wynosić 2.");
     }
 
-    /**
-     * Sprwadza czy liczba martwych komórek jest poprawna.
-     */
     @Test
-    public void testCountDeadCells() {
+    public void testComparing(){
         GameOfLifeCell[] cells = {
                 new GameOfLifeCell(true),
                 new GameOfLifeCell(false),
                 new GameOfLifeCell(true),
-                new GameOfLifeCell(false)
         };
         GameOfLifeColumn column = new GameOfLifeColumn(List.of(cells));
-
-        assertEquals(2, column.countDeadCells(), "Liczba martwych komórek powinna wynosić 2.");
+        assertEquals(column, column);
+        assertFalse(column.equals("ABC"));
+        assertFalse(column.equals(null));
     }
-
 }
