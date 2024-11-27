@@ -68,4 +68,12 @@ class FileGameOfLifeBoardDaoTest {
         }
         assertEquals(board, readBoard, "Odczytana plansza powinna być identyczna z zapisaną");
     }
+
+    @SuppressWarnings("InstantiationOfUtilityClass")
+    @Test
+    void testGameOfLifeBoardDaoFactoryConstructor() {
+        assertDoesNotThrow(() -> {
+            new GameOfLifeBoardDaoFactory();
+        });
+    }
 }
