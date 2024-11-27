@@ -6,12 +6,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Klasa reprezentująca planszę do gry w życie.
  */
-public class GameOfLifeBoard {
+public class GameOfLifeBoard implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final GameOfLifeCell[][] board;
     private final int rowsCount;
     private final int colsCount;
