@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * Komórka posiada swój stan (żywa lub martwa) oraz referencje do swoich sąsiadów.
  * Na podstawie stanu sąsiadów komórka decyduje o swoim stanie w kolejnym kroku symulacji.
  */
-public class GameOfLifeCell {
+public class GameOfLifeCell implements Serializable {
     private boolean value;
     private List<GameOfLifeCell> neighbors;
 

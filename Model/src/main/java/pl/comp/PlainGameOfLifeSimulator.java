@@ -1,11 +1,13 @@
 package pl.comp;
 
+import java.io.Serializable;
+
 /**
  * Klasa implementująca zasady gry w życie.
  * Implementuje interfejs {@link GameOfLifeSimulator}, który definiuje logikę
  * symulacji.
  */
-public class PlainGameOfLifeSimulator implements GameOfLifeSimulator {
+public class PlainGameOfLifeSimulator implements GameOfLifeSimulator, Serializable {
 
     /**
      * Metoda odpowiedzialna za wykonanie jednego kroku symulacji.

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * grupę komórek. Zawiera metody do liczenia liczby żywych oraz martwych
  * komórek w tej grupie.
  */
-public abstract class GameOfLifeGroup {
+public abstract class GameOfLifeGroup implements Serializable {
     protected final List<GameOfLifeCell> cells;
 
     public GameOfLifeGroup(List<GameOfLifeCell> cells) {
