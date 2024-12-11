@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  * Klasa reprezentująca planszę do gry w życie.
  */
 public class GameOfLifeBoard implements Serializable, Cloneable {
-    private final GameOfLifeCell[][] board;
     private final int rowsCount;
     private final int colsCount;
     private final GameOfLifeSimulator simulator;
+    private GameOfLifeCell[][] board;
     private List<GameOfLifeRow> rows;
     private List<GameOfLifeColumn> columns;
 
@@ -227,6 +227,7 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
             GameOfLifeBoard cloned = (GameOfLifeBoard) super.clone();
             cloned.rows = this.rows.stream().map(GameOfLifeRow::clone).collect(Collectors.toList());
             cloned.columns = this.columns.stream().map(GameOfLifeColumn::clone).collect(Collectors.toList());
+            cloned.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
             for (int i = 0; i < this.rowsCount; i++) {
                 for (int j = 0; j < this.colsCount; j++) {
                     cloned.board[i][j] = this.board[i][j].clone();

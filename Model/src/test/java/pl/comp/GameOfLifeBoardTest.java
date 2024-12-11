@@ -344,5 +344,41 @@ public class GameOfLifeBoardTest {
         assertFalse(board3.equals("ABC"));
         assertFalse(board3.equals(null));
     }
+
+
+    /**
+     * Test sprawdzający czy plansza jest klonowalna
+     */
+    @Test
+    public void testClone() {
+        GameOfLifeBoard clonedBoard = board.clone();
+        assertNotSame(board, clonedBoard, "Sklonowana plansza nie powinna być tym samym co oryginał");
+        assertNotSame(board.getRows(), clonedBoard.getRows(), "Wiersze sklonowanej planszy nie powinny być tym samym co oryginał");
+        assertNotSame(board.getColumns(), clonedBoard.getColumns(), "Kolumny sklonowanej planszy nie powinny być tym samym co oryginał");
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < columnsCount; j++) {
+                assertNotSame(board.getCell(i, j), clonedBoard.getCell(i, j), "Komórki sklonowanej planszy nie powinny być tym samym co oryginał");
+            }
+        }
+        assertEquals(board, clonedBoard, "Sklonowana plansza powinna być równa oryginałowi");
+        clonedBoard.set(0, 0, !board.get(0, 0));
+        assertNotEquals(board.get(0, 0), clonedBoard.get(0, 0), "Modyfikacja sklonowanej planszy nie powinna wpływać na oryginalną planszę");
+    }
+
+    /**
+     * Test sprawdzający czy plansza jest porównywana
+     */
+    @Test
+    public void testCompareTo() {
+        GameOfLifeCell cell1 = new GameOfLifeCell(true);
+        GameOfLifeCell cell2 = new GameOfLifeCell(false);
+        GameOfLifeCell cell3 = new GameOfLifeCell(true);
+
+        assertTrue(cell1.compareTo(cell2) > 0, "Żywa komórka powinna być większa niż martwa komórka");
+        assertTrue(cell2.compareTo(cell1) < 0, "Martwa komórka powinna być mniejsza niż żywa komórka");
+        assertEquals(0, cell1.compareTo(cell3), "Dwie żywe komórki powinny być równe");
+        assertEquals(0, cell2.compareTo(new GameOfLifeCell(false)), "Dwie martwe komórki powinny być równe");
+    }
+
 }
 
