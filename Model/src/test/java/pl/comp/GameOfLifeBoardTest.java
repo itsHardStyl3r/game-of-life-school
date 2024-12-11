@@ -380,5 +380,13 @@ public class GameOfLifeBoardTest {
         assertEquals(0, cell2.compareTo(new GameOfLifeCell(false)), "Dwie martwe komórki powinny być równe");
     }
 
+    /**
+     * Sprawdzanie konstruktora z Density.
+     */
+    @Test
+    public void testDensity() {
+        board = new GameOfLifeBoard(5, 5, simulator, Density.LOW);
+        board = new GameOfLifeBoard(5, 5, simulator, null);
+    }
 }
 

@@ -59,7 +59,7 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
         this.rows = new ArrayList<>(this.rowsCount);
         this.columns = new ArrayList<>(this.colsCount);
         this.simulator = simulator;
-        initializeBoard(density);
+        initializeBoard(density == null ? Density.FULL : density);
     }
 
     /**
