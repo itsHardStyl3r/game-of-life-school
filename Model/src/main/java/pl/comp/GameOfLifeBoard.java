@@ -38,18 +38,42 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
         this.rows = new ArrayList<>(this.rowsCount);
         this.columns = new ArrayList<>(this.colsCount);
         this.simulator = simulator;
-        initializeBoard();
+        initializeBoard(Density.FULL);
+    }
+
+    /**
+     * Konstruktor klasy {@link GameOfLifeBoard}.
+     * Inicjalizuje planszę z zadanymi wymiarami, symulatorem i gęstością żywych komórek.
+     *
+     * @param rowsCount Liczba wierszy planszy.
+     * @param colsCount Liczba kolumn planszy.
+     * @param simulator Symulator gry.
+     * @param density   Gęstość żywych komórek.
+     */
+    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator, Density density) {
+        Objects.requireNonNull(simulator);
+        this.rowsCount = Math.max(rowsCount, 1);
+        this.colsCount = Math.max(colsCount, 1);
+        this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
+
+        this.rows = new ArrayList<>(this.rowsCount);
+        this.columns = new ArrayList<>(this.colsCount);
+        this.simulator = simulator;
+        initializeBoard(density);
     }
 
     /**
      * Inicjalizuje planszę losowymi wartościami komórek
      * Korzysta z `Collections.shuffle()` do losowego ustawienia stanu komórek
      */
-    private void initializeBoard() {
+    private void initializeBoard(Density density) {
         List<GameOfLifeCell> allCells = new ArrayList<>(rowsCount * colsCount);
 
         // Określamy liczbę żywych i martwych komórek
         int aliveCount = rowsCount * colsCount / 2;
+        if (density != Density.FULL) {
+            aliveCount = Math.round(rowsCount * colsCount * density.getDensity());
+        }
         int deadCount = (rowsCount * colsCount) - aliveCount;
 
         // Dodajemy komórki żywe
