@@ -14,7 +14,7 @@ import java.util.List;
  * Komórka posiada swój stan (żywa lub martwa) oraz referencje do swoich sąsiadów.
  * Na podstawie stanu sąsiadów komórka decyduje o swoim stanie w kolejnym kroku symulacji.
  */
-public class GameOfLifeCell implements Serializable {
+public class GameOfLifeCell implements Serializable, Cloneable, Comparable<GameOfLifeCell> {
     private boolean value;
     private List<GameOfLifeCell> neighbors;
 
@@ -126,4 +126,21 @@ public class GameOfLifeCell implements Serializable {
                 .append("livingNeighbors", countLivingNeighbors())
                 .toString();
     }
+
+    @Override
+    public GameOfLifeCell clone() {
+        try {
+            GameOfLifeCell cloned = (GameOfLifeCell) super.clone();
+            cloned.neighbors = FixedSizeList.fixedSizeList(neighbors);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    @Override
+    public int compareTo(GameOfLifeCell x) {
+        return Boolean.compare(this.value, x.value);
+    }
 }
+

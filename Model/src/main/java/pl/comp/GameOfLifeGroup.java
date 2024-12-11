@@ -14,7 +14,7 @@ import java.util.List;
  * grupę komórek. Zawiera metody do liczenia liczby żywych oraz martwych
  * komórek w tej grupie.
  */
-public abstract class GameOfLifeGroup implements Serializable {
+public abstract class GameOfLifeGroup implements Serializable, Cloneable {
     protected final List<GameOfLifeCell> cells;
 
     public GameOfLifeGroup(List<GameOfLifeCell> cells) {
@@ -81,6 +81,15 @@ public abstract class GameOfLifeGroup implements Serializable {
                 .append(cells.size())
                 .append(countAliveCells())
                 .toString();
+    }
+
+    @Override
+    public GameOfLifeGroup clone() {
+        try {
+            return (GameOfLifeGroup) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
 
