@@ -8,11 +8,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Klasa reprezentująca planszę do gry w życie.
  */
-public class GameOfLifeBoard implements Serializable {
+public class GameOfLifeBoard implements Serializable, Cloneable {
     private final GameOfLifeCell[][] board;
     private final int rowsCount;
     private final int colsCount;
@@ -219,4 +220,22 @@ public class GameOfLifeBoard implements Serializable {
                 .append("columns", columns)
                 .toString();
     }
+
+    @Override
+    public GameOfLifeBoard clone() {
+        try {
+            GameOfLifeBoard cloned = (GameOfLifeBoard) super.clone();
+            cloned.rows = this.rows.stream().map(GameOfLifeRow::clone).collect(Collectors.toList());
+            cloned.columns = this.columns.stream().map(GameOfLifeColumn::clone).collect(Collectors.toList());
+            for (int i = 0; i < this.rowsCount; i++) {
+                for (int j = 0; j < this.colsCount; j++) {
+                    cloned.board[i][j] = this.board[i][j].clone();
+                }
+            }
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
 }
