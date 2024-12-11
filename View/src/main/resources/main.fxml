@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="MainSceneController">
-    <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
-        <Label text="Konfiguracja Gry w Życie" style="-fx-font-size: 18px;" />
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="280.0" prefWidth="328.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="MainSceneController">
+    <VBox alignment="CENTER" prefHeight="280.0" prefWidth="288.0" spacing="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="0.0">
+        <Label prefHeight="22.0" prefWidth="196.0" style="-fx-font-size: 18px;" text="Konfiguracja Gry w Życie" />
 
         <HBox spacing="10">
-            <Label text="Wpisz ilość wierszy: " />
+            <Label prefHeight="25.0" prefWidth="106.0" text="Wpisz ilość wierszy: " />
             <TextField fx:id="rowsInput" promptText="Wiersze (4-20)" />
         </HBox>
 
         <HBox spacing="10">
-            <Label text="Wpisz ilość kolumn: " />
+            <Label prefHeight="25.0" prefWidth="108.0" text="Wpisz ilość kolumn: " />
             <TextField fx:id="colsInput" promptText="Kolumny (4-20)" />
         </HBox>
 
         <HBox spacing="10">
-            <Label text="Gęstość żywych komórek:" />
-            <ComboBox value="SREDNI" fx:id="densityComboBox">
+            <Label prefHeight="25.0" prefWidth="136.0" text="Gęstość żywych komórek:" />
+            <ComboBox fx:id="densityComboBox" value="SREDNI">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="MALY"/>
-                        <String fx:value="SREDNI"/>
-                        <String fx:value="DUZY"/>
+                        <String fx:value="MALY" />
+                        <String fx:value="SREDNI" />
+                        <String fx:value="DUZY" />
                     </FXCollections>
                 </items>
             </ComboBox>
         </HBox>
 
-        <Button text="Rozpocznij" onAction="#startSimulation" />
+        <Button onAction="#startSimulation" text="Rozpocznij" />
     </VBox>
 </AnchorPane>

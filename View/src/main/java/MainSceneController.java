@@ -18,7 +18,7 @@ public class MainSceneController {
     private ComboBox<String> densityComboBox;
 
     @FXML
-    private void startSimulation() {
+    public void startSimulation() {
         try {
             int rows = Integer.parseInt(rowsInput.getText());
             int cols = Integer.parseInt(colsInput.getText());

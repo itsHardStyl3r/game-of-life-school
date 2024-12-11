@@ -33,7 +33,7 @@ public class SimulationSceneController {
     }
 
     @FXML
-    private void performNextStep() {
+    public void performNextStep() {
         gameBoard.doSimulationStep();
         renderBoard();
     }
