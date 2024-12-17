@@ -15,5 +15,7 @@
                 <Insets top="5.0"/>
             </VBox.margin>
         </Button>
+        <Button onAction="#saveBoard" text="Zapisz planszę"/>
+        <Button onAction="#loadBoard" text="Wczytaj planszę"/>
     </VBox>
 </AnchorPane>

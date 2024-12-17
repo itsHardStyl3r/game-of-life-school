@@ -9,7 +9,7 @@ public class SimulationSceneController {
 
     @FXML
     private GridPane gameGrid;
-
+    private final FileGameOfLifeBoardDao fdao = new FileGameOfLifeBoardDao(Main.FILESAVENAME);
     private GameOfLifeBoard gameBoard;
 
     public void initializeBoard(int rows, int cols, Density density) {
@@ -63,6 +63,25 @@ public class SimulationSceneController {
                     : "-fx-background-color: lightgray; -fx-padding: 5px;");
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void saveBoard() {
+        try {
+            fdao.write(gameBoard);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void loadBoard() {
+        try {
+            gameBoard = fdao.read();
+            renderBoard();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
