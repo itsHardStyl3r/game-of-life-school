@@ -1,9 +1,9 @@
+import javafx.beans.property.adapter.JavaBeanBooleanProperty;
+import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import pl.comp.Density;
-import pl.comp.GameOfLifeBoard;
-import pl.comp.PlainGameOfLifeSimulator;
+import pl.comp.*;
 
 public class SimulationSceneController {
 
@@ -19,15 +19,20 @@ public class SimulationSceneController {
 
     private void renderBoard() {
         gameGrid.getChildren().clear();
+
         for (int i = 0; i < gameBoard.getRows().size(); i++) {
             for (int j = 0; j < gameBoard.getColumns().size(); j++) {
-                Label cell = new Label("\t");
-                if (gameBoard.get(i, j)) {
-                    cell.setStyle("-fx-background-color: green;-fx-padding: 5px;");
-                } else {
-                    cell.setStyle("-fx-background-color: lightgray;-fx-padding: 5px;");
-                }
-                gameGrid.add(cell, j, i);
+                GameOfLifeCell cell = gameBoard.getCell(i, j);
+
+                Label cellLabel = new Label("\t");
+                bindCellToLabel(cell, cellLabel);
+
+                cellLabel.setOnMouseClicked(event -> {
+                    cell.updateState(!cell.getCellValue());
+                    renderBoard();
+                });
+
+                gameGrid.add(cellLabel, j, i);
             }
         }
     }
@@ -36,5 +41,28 @@ public class SimulationSceneController {
     public void performNextStep() {
         gameBoard.doSimulationStep();
         renderBoard();
+    }
+
+    private void bindCellToLabel(GameOfLifeCell cell, Label label) {
+        try {
+            JavaBeanBooleanProperty cellValueProperty = JavaBeanBooleanPropertyBuilder.create()
+                    .bean(cell)
+                    .name("cellValue")
+                    .getter("getCellValue")
+                    .setter("updateState")
+                    .build();
+
+            cellValueProperty.addListener((observable, oldValue, newValue) -> {
+                label.setStyle(newValue
+                        ? "-fx-background-color: green; -fx-padding: 5px;"
+                        : "-fx-background-color: lightgray; -fx-padding: 5px;");
+            });
+
+            label.setStyle(cell.getCellValue()
+                    ? "-fx-background-color: green; -fx-padding: 5px;"
+                    : "-fx-background-color: lightgray; -fx-padding: 5px;");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 }
