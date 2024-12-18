@@ -12,6 +12,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainSceneController {
+
+    private ResourceBundle bundle = ResourceBundleManager.getBundle();
+
+    @FXML
+    private Label titleLabel;
+
     @FXML
     private Label rowsInputLabel;
 
@@ -20,6 +26,9 @@ public class MainSceneController {
 
     @FXML
     private Label densityLabel;
+
+    @FXML
+    private Label changeLocale;
 
     @FXML
     private ComboBox<String> densityComboBox;
@@ -33,19 +42,21 @@ public class MainSceneController {
     @FXML
     private Button startButton;
 
+    @FXML
+    private Button pl;
+
+    @FXML
+    private Button en;
 
     public void initialize() {
-        updateTexts(ResourceBundleManager.getBundle());
-    }
-
-    private void updateTexts(ResourceBundle bundle) {
-
+        titleLabel.setText(bundle.getString("title"));
         rowsInputLabel.setText(bundle.getString("rows_label"));
         colsInputLabel.setText(bundle.getString("cols_label"));
         densityLabel.setText(bundle.getString("density_label"));
         rowsInput.setPromptText(bundle.getString("rows_prompt"));
         colsInput.setPromptText(bundle.getString("cols_prompt"));
         startButton.setText(bundle.getString("start_button"));
+        changeLocale.setText(bundle.getString("changeLocale"));
 
         densityComboBox.getItems().clear();
         densityComboBox.getItems().addAll(
@@ -54,6 +65,9 @@ public class MainSceneController {
                 bundle.getString("large")
         );
         densityComboBox.setValue(bundle.getString("medium"));
+
+        pl.setOnAction(e -> changeLanguage("pl"));
+        en.setOnAction(e -> changeLanguage("en"));
     }
 
     @FXML
@@ -75,7 +89,7 @@ public class MainSceneController {
 
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(simulationScene);
-            stage.setTitle("Game of Life (symulacja)");
+            stage.setTitle(bundle.getString("simulationTitle"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,27 +108,17 @@ public class MainSceneController {
     }
 
     public void changeLanguage(String languageCode) {
-        Locale locale = new Locale(languageCode);
-        ResourceBundleManager.setLocale(locale);
+        ResourceBundleManager.setLocale(Locale.of(languageCode));
+        bundle = ResourceBundleManager.getBundle();
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-            loader.setResources(ResourceBundleManager.getBundle());
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));
+            stage.setTitle(bundle.getString("title"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    public void changeToEnglish() {
-        changeLanguage("en");
-    }
-
-    @FXML
-    public void changeToPolish() {
-        changeLanguage("pl");
     }
 
 }

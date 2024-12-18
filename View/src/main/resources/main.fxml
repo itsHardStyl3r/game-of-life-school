@@ -9,8 +9,9 @@
         <Label fx:id="titleLabel" prefHeight="22.0" prefWidth="196.0" style="-fx-font-size: 18px;" text=""/>
 
         <HBox spacing="10">
-            <Button text="EN" onAction="#changeToEnglish"/>
-            <Button text="PL" onAction="#changeToPolish"/>
+            <Label fx:id="changeLocale" prefHeight="25.0" prefWidth="106.0" text=""/>
+            <Button fx:id="en" text="EN"/>
+            <Button fx:id="pl" text="PL"/>
         </HBox>
 
         <HBox spacing="10">
