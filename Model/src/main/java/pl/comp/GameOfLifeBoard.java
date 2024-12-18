@@ -122,7 +122,11 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
     }
 
     public static String getLocaleMessage(String s) {
-        return ResourceBundle.getBundle("messages").getString(s);
+        try {
+            return ResourceBundle.getBundle("messages").getString(s);
+        } catch (MissingResourceException e) {
+            return "missing " + s;
+        }
     }
 
     /**
