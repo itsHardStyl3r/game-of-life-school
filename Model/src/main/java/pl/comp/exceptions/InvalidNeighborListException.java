@@ -10,4 +10,12 @@ public class InvalidNeighborListException extends RuntimeException {
     public InvalidNeighborListException(String message) {
         super(message);
     }
+
+    public InvalidNeighborListException(Throwable cause) {
+        super(cause);
+    }
+
+    public InvalidNeighborListException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

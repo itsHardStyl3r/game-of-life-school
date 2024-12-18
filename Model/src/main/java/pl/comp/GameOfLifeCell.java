@@ -150,7 +150,7 @@ public class GameOfLifeCell implements Serializable, Cloneable, Comparable<GameO
     public int compareTo(GameOfLifeCell x) {
         if (x == null) {
             logger.error(getLocaleMessage("cellComparingToNull"));
-            throw new CellCompareException();
+            throw new CellCompareException(getLocaleMessage("cellComparingToNull"), new NullPointerException());
         }
         return Boolean.compare(this.value, x.value);
     }

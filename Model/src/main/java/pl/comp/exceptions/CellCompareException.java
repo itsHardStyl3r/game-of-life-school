@@ -10,4 +10,12 @@ public class CellCompareException extends RuntimeException {
     public CellCompareException(String message) {
         super(message);
     }
+
+    public CellCompareException(Throwable cause) {
+        super(cause);
+    }
+
+    public CellCompareException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
