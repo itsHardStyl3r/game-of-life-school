@@ -9,11 +9,17 @@ public class Main extends Application {
 
     public static final String FILESAVENAME = "save.txt";
 
+    public static void main(String[] args) {
+        launch(Main.class, args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+        loader.setResources(ResourceBundleManager.getBundle());
         Scene scene = new Scene(loader.load());
-        primaryStage.setTitle("Game of Life");
+
+        primaryStage.setTitle(ResourceBundleManager.getBundle().getString("title"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -24,9 +30,5 @@ public class Main extends Application {
         if (f.exists()) {
             f.delete();
         }
-    }
-
-    public static void main(String[] args) {
-        launch(Main.class, args);
     }
 }

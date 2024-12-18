@@ -1,16 +1,36 @@
 import javafx.beans.property.adapter.JavaBeanBooleanProperty;
 import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import pl.comp.*;
 
+import java.util.ResourceBundle;
+
 public class SimulationSceneController {
 
+    private final FileGameOfLifeBoardDao fdao = new FileGameOfLifeBoardDao(Main.FILESAVENAME);
+    @FXML
+    private Label simulationTitle;
+    @FXML
+    private Button nextStepButton;
+    @FXML
+    private Button saveBoardButton;
+    @FXML
+    private Button loadBoardButton;
     @FXML
     private GridPane gameGrid;
-    private final FileGameOfLifeBoardDao fdao = new FileGameOfLifeBoardDao(Main.FILESAVENAME);
     private GameOfLifeBoard gameBoard;
+
+    @FXML
+    public void initialize() {
+        ResourceBundle bundle = ResourceBundle.getBundle("messages");
+        simulationTitle.setText(bundle.getString("simulationTitle"));
+        nextStepButton.setText(bundle.getString("nextStep"));
+        saveBoardButton.setText(bundle.getString("saveBoard"));
+        loadBoardButton.setText(bundle.getString("loadBoard"));
+    }
 
     public void initializeBoard(int rows, int cols, Density density) {
         gameBoard = new GameOfLifeBoard(rows, cols, new PlainGameOfLifeSimulator(), density);
