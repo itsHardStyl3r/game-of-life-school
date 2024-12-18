@@ -27,6 +27,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
             return (GameOfLifeBoard) inputStream.readUnshared();
         } catch (Exception e) {
             logger.error(getLocaleMessage("daoException"), e);
+            close();
         }
         return null;
     }
@@ -38,6 +39,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
             outputStream.writeUnshared(board);
         } catch (Exception e) {
             logger.error(getLocaleMessage("daoException"), e);
+            close();
         }
     }
 

@@ -2,6 +2,8 @@ package pl.comp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.comp.exceptions.CellCompareException;
+import pl.comp.exceptions.InvalidNeighborListException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,12 +47,7 @@ public class GameOfLifeCellTest {
         }
 
         // Spodziewane rzucenie wyjątku przy ustawieniu z niepoprawną liczbą sąsiadów
-        try {
-            cell.setNeighbors(List.of(invalidNeighbors));
-            fail("Spodziewany wyjątek IllegalArgumentException z powodu niepoprawnej liczby sąsiadów.");
-        } catch (IllegalArgumentException e) {
-            // Wyjątek został przechwycony, test przechodzi
-        }
+        assertThrows(InvalidNeighborListException.class, () -> cell.setNeighbors(List.of(invalidNeighbors)));
 
         GameOfLifeCell[] validNeighbors = new GameOfLifeCell[8];
         for (int i = 0; i < validNeighbors.length; i++) {
@@ -123,7 +120,7 @@ public class GameOfLifeCellTest {
      */
     @Test
     public void testSizeWithInvalidSize() {
-        assertThrows(IllegalArgumentException.class, () -> cell.setNeighbors(Arrays.asList(new GameOfLifeCell(true), new GameOfLifeCell(false))), "Powinien zostać rzucony wyjątek, gdy lista sąsiadów ma mniej niż 8 elementów.");
+        assertThrows(InvalidNeighborListException.class, () -> cell.setNeighbors(Arrays.asList(new GameOfLifeCell(true), new GameOfLifeCell(false))), "Powinien zostać rzucony wyjątek, gdy lista sąsiadów ma mniej niż 8 elementów.");
     }
 
     /**
@@ -196,6 +193,6 @@ public class GameOfLifeCellTest {
         assertTrue(cell2.compareTo(cell1) < 0, "Martwa komórka powinna być mniejsza niż żywa komórka");
         assertEquals(0, cell1.compareTo(cell3), "Dwie żywe komórki powinny być równe");
         assertEquals(0, cell2.compareTo(new GameOfLifeCell(false)), "Dwie martwe komórki powinny być równe");
-        assertThrows(NullPointerException.class, () -> cell.compareTo(null));
+        assertThrows(CellCompareException.class, () -> cell.compareTo(null));
     }
 }

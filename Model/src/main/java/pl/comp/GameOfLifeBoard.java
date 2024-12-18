@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.comp.exceptions.UnspecifiedSimulatorException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -32,12 +33,12 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
      * @param rowsCount Liczba wierszy planszy.
      * @param colsCount Liczba kolumn planszy.
      * @param simulator Symulator gry.
-     * @throws NullPointerException Gdy symulator nie został podany.
+     * @throws UnspecifiedSimulatorException Gdy symulator nie został podany — jest nullem.
      */
-    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator) throws NullPointerException {
+    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator) {
         if (simulator == null) {
             logger.error(getLocaleMessage("simulatorIsNullException"));
-            throw new NullPointerException();
+            throw new UnspecifiedSimulatorException();
         }
         this.rowsCount = Math.max(rowsCount, 1);
         this.colsCount = Math.max(colsCount, 1);
@@ -57,13 +58,12 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
      * @param colsCount Liczba kolumn planszy.
      * @param simulator Symulator gry.
      * @param density   Gęstość żywych komórek.
-     * @throws NullPointerException Gdy symulator nie został podany.
+     * @throws UnspecifiedSimulatorException Gdy symulator nie został podany.
      */
-    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator, Density density)
-            throws NullPointerException {
+    public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator, Density density) {
         if (simulator == null) {
             logger.error(getLocaleMessage("simulatorIsNullException"));
-            throw new NullPointerException();
+            throw new UnspecifiedSimulatorException();
         }
         this.rowsCount = Math.max(rowsCount, 1);
         this.colsCount = Math.max(colsCount, 1);

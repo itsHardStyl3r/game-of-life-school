@@ -2,6 +2,7 @@ package pl.comp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.comp.exceptions.UnspecifiedSimulatorException;
 
 import java.util.Arrays;
 
@@ -372,6 +373,12 @@ public class GameOfLifeBoardTest {
     public void testDensity() {
         board = new GameOfLifeBoard(5, 5, simulator, Density.LOW);
         board = new GameOfLifeBoard(5, 5, simulator, null);
+    }
+
+    @Test
+    public void testBoardNullSimulator() {
+        assertThrows(UnspecifiedSimulatorException.class, () -> new GameOfLifeBoard(5, 5, null, null));
+        assertThrows(UnspecifiedSimulatorException.class, () -> new GameOfLifeBoard(5, 5, null));
     }
 }
 

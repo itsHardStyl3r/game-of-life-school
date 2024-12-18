@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.comp.exceptions.CellCompareException;
+import pl.comp.exceptions.InvalidNeighborListException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -89,12 +91,12 @@ public class GameOfLifeCell implements Serializable, Cloneable, Comparable<GameO
      * Ustawia sąsiadów komórki. Metoda przyjmuje listę dokładnie 8 "komórek sąsiadów".
      *
      * @param neighbors Lista 8 sąsiednich komórek typu pl.comp.GameOfLifeCell.
-     * @throws IllegalArgumentException Gdy rozmiar listy sąsiadów nie wynosi 8.
+     * @throws InvalidNeighborListException Gdy rozmiar listy sąsiadów nie wynosi 8.
      */
-    public void setNeighbors(List<GameOfLifeCell> neighbors) throws IllegalArgumentException {
+    public void setNeighbors(List<GameOfLifeCell> neighbors) {
         if (neighbors.size() != 8) {
             logger.error(getLocaleMessage("illegalNeighborListSize"));
-            throw new IllegalArgumentException();
+            throw new InvalidNeighborListException();
         }
         this.neighbors = FixedSizeList.fixedSizeList(neighbors);
     }
@@ -145,10 +147,10 @@ public class GameOfLifeCell implements Serializable, Cloneable, Comparable<GameO
     }
 
     @Override
-    public int compareTo(GameOfLifeCell x) throws NullPointerException {
+    public int compareTo(GameOfLifeCell x) {
         if (x == null) {
             logger.error(getLocaleMessage("cellComparingToNull"));
-            throw new NullPointerException();
+            throw new CellCompareException();
         }
         return Boolean.compare(this.value, x.value);
     }
