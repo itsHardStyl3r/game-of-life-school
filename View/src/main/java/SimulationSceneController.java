@@ -23,9 +23,10 @@ public class SimulationSceneController {
     private GridPane gameGrid;
     private GameOfLifeBoard gameBoard;
 
+    private final ResourceBundle bundle = ResourceBundleManager.getBundle();
+
     @FXML
     public void initialize() {
-        ResourceBundle bundle = ResourceBundle.getBundle("messages");
         simulationTitle.setText(bundle.getString("simulationTitle"));
         nextStepButton.setText(bundle.getString("nextStep"));
         saveBoardButton.setText(bundle.getString("saveBoard"));
