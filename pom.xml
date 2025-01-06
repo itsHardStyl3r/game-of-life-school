@@ -42,7 +42,7 @@
     <licenses>
         <license>
             <name>GPL 3.0 License</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <url>LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
