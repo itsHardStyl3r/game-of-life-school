@@ -3,8 +3,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import pl.comp.Density;
 
@@ -13,22 +13,7 @@ import java.util.ResourceBundle;
 
 public class MainSceneController {
 
-    private ResourceBundle bundle = ResourceBundleManager.getBundle();
-
-    @FXML
-    private Label titleLabel;
-
-    @FXML
-    private Label rowsInputLabel;
-
-    @FXML
-    private Label colsInputLabel;
-
-    @FXML
-    private Label densityLabel;
-
-    @FXML
-    private Label changeLocale;
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.DEFAULTLOCALE);
 
     @FXML
     private ComboBox<String> densityComboBox;
@@ -40,24 +25,39 @@ public class MainSceneController {
     private TextField colsInput;
 
     @FXML
-    private Button startButton;
-
-    @FXML
     private Button pl;
 
     @FXML
     private Button en;
 
     public void initialize() {
-        titleLabel.setText(bundle.getString("title"));
-        rowsInputLabel.setText(bundle.getString("rows_label"));
-        colsInputLabel.setText(bundle.getString("cols_label"));
-        densityLabel.setText(bundle.getString("density_label"));
-        rowsInput.setPromptText(bundle.getString("rows_prompt"));
-        colsInput.setPromptText(bundle.getString("cols_prompt"));
-        startButton.setText(bundle.getString("start_button"));
-        changeLocale.setText(bundle.getString("changeLocale"));
+        fillCombo();
+        rowsInput.setTextFormatter(getFormatter(4, 20));
+        colsInput.setTextFormatter(getFormatter(4, 20));
 
+        pl.setOnAction(e -> changeLanguage("pl"));
+        en.setOnAction(e -> changeLanguage("en"));
+    }
+
+    private TextFormatter<String> getFormatter(int min, int max) {
+        return new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+            if (newText.isEmpty() || newText.matches("\\d{0,2}")) {
+                return change;
+            }
+            try {
+                int value = Integer.parseInt(newText);
+                if (value >= min && value <= max) {
+                    return change;
+                }
+            } catch (NumberFormatException ignored) {
+                // ignoruj
+            }
+            return null;
+        });
+    }
+
+    private void fillCombo() {
         densityComboBox.getItems().clear();
         densityComboBox.getItems().addAll(
                 bundle.getString("small"),
@@ -65,9 +65,6 @@ public class MainSceneController {
                 bundle.getString("large")
         );
         densityComboBox.setValue(bundle.getString("medium"));
-
-        pl.setOnAction(e -> changeLanguage("pl"));
-        en.setOnAction(e -> changeLanguage("en"));
     }
 
     @FXML
@@ -82,6 +79,7 @@ public class MainSceneController {
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("simulation.fxml"));
+            loader.setResources(bundle);
             Scene simulationScene = new Scene(loader.load());
 
             SimulationSceneController controller = loader.getController();
@@ -96,11 +94,11 @@ public class MainSceneController {
     }
 
     private Density fromString(String s) {
-        if (s.equalsIgnoreCase("MALY")) {
+        if (s.equalsIgnoreCase(bundle.getString("small"))) {
             return Density.LOW;
-        } else if (s.equalsIgnoreCase("SREDNI")) {
+        } else if (s.equalsIgnoreCase(bundle.getString("medium"))) {
             return Density.MEDIUM;
-        } else if (s.equalsIgnoreCase("DUZY")) {
+        } else if (s.equalsIgnoreCase(bundle.getString("large"))) {
             return Density.HIGH;
         } else {
             return Density.FULL;
@@ -108,14 +106,14 @@ public class MainSceneController {
     }
 
     public void changeLanguage(String languageCode) {
-        ResourceBundleManager.setLocale(Locale.of(languageCode));
-        bundle = ResourceBundleManager.getBundle();
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+            bundle = ResourceBundle.getBundle("messages", Locale.of(languageCode));
+            loader.setResources(bundle);
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));
-            stage.setTitle(bundle.getString("title"));
+            stage.setTitle(loader.getResources().getString("title"));
+            fillCombo();
         } catch (Exception e) {
             e.printStackTrace();
         }

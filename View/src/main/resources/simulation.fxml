@@ -8,16 +8,16 @@
             fx:controller="SimulationSceneController">
     <VBox alignment="CENTER" layoutX="20.0" spacing="10" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
           AnchorPane.topAnchor="0.0">
-        <Label fx:id="simulationTitle" style="-fx-font-size: 18px;" text=""/>
+        <Label style="-fx-font-size: 18px;" text="%simulationTitle"/>
 
         <GridPane fx:id="gameGrid" alignment="CENTER"/>
 
-        <Button fx:id="nextStepButton" onAction="#performNextStep" prefWidth="93.0" text="">
+        <Button onAction="#performNextStep" prefWidth="93.0" text="%nextStep">
             <VBox.margin>
                 <Insets top="5.0"/>
             </VBox.margin>
         </Button>
-        <Button fx:id="saveBoardButton" onAction="#saveBoard" text=""/>
-        <Button fx:id="loadBoardButton" onAction="#loadBoard" text=""/>
+        <Button onAction="#saveBoard" text="%saveBoard"/>
+        <Button onAction="#loadBoard" text="%loadBoard"/>
     </VBox>
 </AnchorPane>

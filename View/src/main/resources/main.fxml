@@ -6,29 +6,29 @@
             xmlns="http://javafx.com/javafx/22.0.1" fx:controller="MainSceneController">
     <VBox alignment="CENTER" prefHeight="280.0" prefWidth="288.0" spacing="20" AnchorPane.leftAnchor="20"
           AnchorPane.rightAnchor="20" AnchorPane.topAnchor="0.0">
-        <Label fx:id="titleLabel" prefHeight="22.0" prefWidth="196.0" style="-fx-font-size: 18px;" text=""/>
+        <Label prefHeight="22.0" prefWidth="196.0" style="-fx-font-size: 18px;" text="%title"/>
 
         <HBox spacing="10">
-            <Label fx:id="changeLocale" prefHeight="25.0" prefWidth="106.0" text=""/>
-            <Button fx:id="en" text="EN"/>
-            <Button fx:id="pl" text="PL"/>
+            <Label prefHeight="25.0" prefWidth="106.0" text="%changeLocale"/>
+            <Button fx:id="en" text="English"/>
+            <Button fx:id="pl" text="Polski"/>
         </HBox>
 
         <HBox spacing="10">
-            <Label fx:id="rowsInputLabel" prefHeight="25.0" prefWidth="106.0" text=""/>
-            <TextField fx:id="rowsInput" promptText=""/>
+            <Label prefHeight="25.0" prefWidth="106.0" text="%rows_label"/>
+            <TextField fx:id="rowsInput" promptText="%rows_prompt"/>
         </HBox>
 
         <HBox spacing="10">
-            <Label fx:id="colsInputLabel" prefHeight="25.0" prefWidth="108.0" text=""/>
-            <TextField fx:id="colsInput" promptText=""/>
+            <Label prefHeight="25.0" prefWidth="108.0" text="%cols_label"/>
+            <TextField fx:id="colsInput" promptText="%cols_prompt"/>
         </HBox>
 
         <HBox spacing="10">
-            <Label fx:id="densityLabel" prefHeight="25.0" prefWidth="136.0" text=""/>
+            <Label prefHeight="25.0" prefWidth="136.0" text="%density_label"/>
             <ComboBox fx:id="densityComboBox"/>
         </HBox>
 
-        <Button fx:id="startButton" onAction="#startSimulation" text=""/>
+        <Button onAction="#startSimulation" text="%start_button"/>
     </VBox>
 </AnchorPane>
