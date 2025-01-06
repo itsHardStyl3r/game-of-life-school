@@ -6,6 +6,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.comp.Density;
 
 import java.util.Enumeration;
@@ -15,7 +17,8 @@ import java.util.ResourceBundle;
 public class MainSceneController {
 
     public static Locale locale = Main.DEFAULTLOCALE;
-    private ResourceBundle bundle = ResourceBundle.getBundle("messages", getLocale());
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.DEFAULTLOCALE);
+    private static final Logger logger = LoggerFactory.getLogger(MainSceneController.class);
 
     @FXML
     private ComboBox<String> densityComboBox;
@@ -85,7 +88,8 @@ public class MainSceneController {
             final String densityValue = densityComboBox.getValue();
 
             if (rows < 4 || rows > 20 || cols < 4 || cols > 20) {
-                throw new IllegalArgumentException("Plansza moze miec wymiary od 4 do 20 w kazda strone.");
+                logger.error(bundle.getString("illegalBoardSize"));
+                return;
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("simulation.fxml"));
