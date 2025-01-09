@@ -6,6 +6,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.comp.Density;
 
 import java.util.Enumeration;
@@ -14,8 +16,8 @@ import java.util.ResourceBundle;
 
 public class MainSceneController {
 
-    public static Locale locale = Main.DEFAULTLOCALE;
-    private ResourceBundle bundle = ResourceBundle.getBundle("messages", getLocale());
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
+    private static final Logger logger = LoggerFactory.getLogger(MainSceneController.class);
 
     @FXML
     private ComboBox<String> densityComboBox;
@@ -69,14 +71,6 @@ public class MainSceneController {
         densityComboBox.setValue(bundle.getString("medium"));
     }
 
-    public static Locale getLocale() {
-        return locale;
-    }
-
-    public static void setLocale(Locale l) {
-        locale = l;
-    }
-
     @FXML
     public void startSimulation() {
         try {
@@ -85,7 +79,8 @@ public class MainSceneController {
             final String densityValue = densityComboBox.getValue();
 
             if (rows < 4 || rows > 20 || cols < 4 || cols > 20) {
-                throw new IllegalArgumentException("Plansza moze miec wymiary od 4 do 20 w kazda strone.");
+                logger.error(bundle.getString("illegalBoardSize"));
+                return;
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("simulation.fxml"));
@@ -98,7 +93,7 @@ public class MainSceneController {
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(simulationScene);
             stage.setTitle(bundle.getString("simulationTitle"));
-            ResourceBundle authors = ResourceBundle.getBundle("MyResource", getLocale());
+            ResourceBundle authors = ResourceBundle.getBundle("MyResource", Main.getLocale());
             System.out.println(authors.getString("authorTitle") + ":");
             for (Enumeration<String> e = authors.getKeys(); e.hasMoreElements(); ) {
                 String s = e.nextElement();
@@ -126,8 +121,8 @@ public class MainSceneController {
     public void changeLanguage(String languageCode) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-            setLocale(Locale.of(languageCode));
-            bundle = ResourceBundle.getBundle("messages", getLocale());
+            Main.setLocale(Locale.of(languageCode));
+            bundle = ResourceBundle.getBundle("messages", Main.getLocale());
             loader.setResources(bundle);
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));

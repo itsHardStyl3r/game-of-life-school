@@ -57,20 +57,12 @@ public class SimulationSceneController {
 
     @FXML
     public void saveBoard() {
-        try {
-            fdao.write(gameBoard);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        fdao.write(gameBoard);
     }
 
     @FXML
     public void loadBoard() {
-        try {
-            gameBoard = fdao.read();
-            renderBoard();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        gameBoard = fdao.read();
+        renderBoard();
     }
 }

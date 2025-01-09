@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.comp.exceptions.UnspecifiedSimulatorException;
 
 import java.io.Serializable;
 import java.util.*;
@@ -21,6 +24,8 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
     private List<GameOfLifeRow> rows;
     private List<GameOfLifeColumn> columns;
 
+    private static final Logger logger = LoggerFactory.getLogger(GameOfLifeBoard.class);
+
     /**
      * Konstruktor klasy {@link GameOfLifeBoard}.
      * Inicjalizuje planszę z zadanymi wymiarami i symulatorem.
@@ -28,9 +33,13 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
      * @param rowsCount Liczba wierszy planszy.
      * @param colsCount Liczba kolumn planszy.
      * @param simulator Symulator gry.
+     * @throws UnspecifiedSimulatorException Gdy symulator nie został podany — jest nullem.
      */
     public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator) {
-        Objects.requireNonNull(simulator);
+        if (simulator == null) {
+            logger.error(getLocaleMessage("simulatorIsNullException"));
+            throw new UnspecifiedSimulatorException();
+        }
         this.rowsCount = Math.max(rowsCount, 1);
         this.colsCount = Math.max(colsCount, 1);
         this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
@@ -49,9 +58,13 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
      * @param colsCount Liczba kolumn planszy.
      * @param simulator Symulator gry.
      * @param density   Gęstość żywych komórek.
+     * @throws UnspecifiedSimulatorException Gdy symulator nie został podany.
      */
     public GameOfLifeBoard(int rowsCount, int colsCount, GameOfLifeSimulator simulator, Density density) {
-        Objects.requireNonNull(simulator);
+        if (simulator == null) {
+            logger.error(getLocaleMessage("simulatorIsNullException"));
+            throw new UnspecifiedSimulatorException();
+        }
         this.rowsCount = Math.max(rowsCount, 1);
         this.colsCount = Math.max(colsCount, 1);
         this.board = new GameOfLifeCell[this.rowsCount][this.colsCount];
@@ -106,6 +119,14 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
         rows = FixedSizeList.fixedSizeList(rows);
         columns = FixedSizeList.fixedSizeList(columns);
         linkNeighbors();
+    }
+
+    public static String getLocaleMessage(String s) {
+        try {
+            return ResourceBundle.getBundle("messages").getString(s);
+        } catch (MissingResourceException e) {
+            return "missing " + s;
+        }
     }
 
     /**
