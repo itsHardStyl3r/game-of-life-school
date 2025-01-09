@@ -1,16 +1,21 @@
+import javafx.beans.property.adapter.JavaBeanBooleanProperty;
+import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import pl.comp.Density;
-import pl.comp.GameOfLifeBoard;
-import pl.comp.PlainGameOfLifeSimulator;
+import pl.comp.*;
 
 public class SimulationSceneController {
 
+    private final FileGameOfLifeBoardDao fdao = new FileGameOfLifeBoardDao(Main.FILESAVENAME);
+    private final CellStyleConverter cellStyleConverter = new CellStyleConverter();
     @FXML
     private GridPane gameGrid;
-
     private GameOfLifeBoard gameBoard;
+
+    @FXML
+    public void initialize() {
+    }
 
     public void initializeBoard(int rows, int cols, Density density) {
         gameBoard = new GameOfLifeBoard(rows, cols, new PlainGameOfLifeSimulator(), density);
@@ -19,22 +24,53 @@ public class SimulationSceneController {
 
     private void renderBoard() {
         gameGrid.getChildren().clear();
+
         for (int i = 0; i < gameBoard.getRows().size(); i++) {
             for (int j = 0; j < gameBoard.getColumns().size(); j++) {
-                Label cell = new Label("\t");
-                if (gameBoard.get(i, j)) {
-                    cell.setStyle("-fx-background-color: green;-fx-padding: 5px;");
-                } else {
-                    cell.setStyle("-fx-background-color: lightgray;-fx-padding: 5px;");
+                GameOfLifeCell cell = gameBoard.getCell(i, j);
+                try {
+                    Label cellLabel = new Label("\t");
+                    JavaBeanBooleanProperty cellValueProperty = JavaBeanBooleanPropertyBuilder.create()
+                            .bean(cell)
+                            .name("cellValue")
+                            .getter("getCellValue")
+                            .setter("updateState")
+                            .build();
+
+                    cellLabel.styleProperty().bindBidirectional(cellValueProperty, cellStyleConverter);
+                    cellLabel.setOnMouseClicked(event -> {
+                        cellValueProperty.set(!cellValueProperty.get());
+                    });
+                    gameGrid.add(cellLabel, j, i);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
                 }
-                gameGrid.add(cell, j, i);
             }
         }
     }
 
     @FXML
-    private void performNextStep() {
+    public void performNextStep() {
         gameBoard.doSimulationStep();
         renderBoard();
+    }
+
+    @FXML
+    public void saveBoard() {
+        try {
+            fdao.write(gameBoard);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void loadBoard() {
+        try {
+            gameBoard = fdao.read();
+            renderBoard();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

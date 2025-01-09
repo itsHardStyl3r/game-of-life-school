@@ -17,13 +17,13 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
     @Override
     public GameOfLifeBoard read() throws Exception {
         inputStream = new ObjectInputStream(new FileInputStream(fileName));
-        return (GameOfLifeBoard) inputStream.readObject();
+        return (GameOfLifeBoard) inputStream.readUnshared();
     }
 
     @Override
     public void write(GameOfLifeBoard board) throws Exception {
         outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
-        outputStream.writeObject(board);
+        outputStream.writeUnshared(board);
     }
 
     @Override

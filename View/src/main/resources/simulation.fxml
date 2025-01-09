@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="SimulationSceneController">
-    <VBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
-          AnchorPane.rightAnchor="20">
-        <Label text="Symulacja gry w życie" style="-fx-font-size: 18px;"/>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22.0.1"
+            fx:controller="SimulationSceneController">
+    <VBox alignment="CENTER" layoutX="20.0" spacing="10" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+          AnchorPane.topAnchor="0.0">
+        <Label style="-fx-font-size: 18px;" text="%simulationTitle"/>
+
         <GridPane fx:id="gameGrid" alignment="CENTER"/>
-        <Button text="Następny krok" onAction="#performNextStep"/>
+
+        <Button onAction="#performNextStep" prefWidth="93.0" text="%nextStep">
+            <VBox.margin>
+                <Insets top="5.0"/>
+            </VBox.margin>
+        </Button>
+        <Button onAction="#saveBoard" text="%saveBoard"/>
+        <Button onAction="#loadBoard" text="%loadBoard"/>
     </VBox>
 </AnchorPane>

@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="MainSceneController">
-    <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
-        <Label text="Konfiguracja Gry w Życie" style="-fx-font-size: 18px;" />
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="280.0" prefWidth="328.0"
+            xmlns="http://javafx.com/javafx/22.0.1" fx:controller="MainSceneController">
+    <VBox alignment="CENTER" prefHeight="280.0" prefWidth="288.0" spacing="20" AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20" AnchorPane.topAnchor="0.0">
+        <Label prefHeight="22.0" prefWidth="196.0" style="-fx-font-size: 18px;" text="%title"/>
 
         <HBox spacing="10">
-            <Label text="Wpisz ilość wierszy: " />
-            <TextField fx:id="rowsInput" promptText="Wiersze (4-20)" />
+            <Label prefHeight="25.0" prefWidth="106.0" text="%changeLocale"/>
+            <Button fx:id="en" text="English"/>
+            <Button fx:id="pl" text="Polski"/>
         </HBox>
 
         <HBox spacing="10">
-            <Label text="Wpisz ilość kolumn: " />
-            <TextField fx:id="colsInput" promptText="Kolumny (4-20)" />
+            <Label prefHeight="25.0" prefWidth="106.0" text="%rows_label"/>
+            <TextField fx:id="rowsInput" promptText="%rows_prompt"/>
         </HBox>
 
         <HBox spacing="10">
-            <Label text="Gęstość żywych komórek:" />
-            <ComboBox value="SREDNI" fx:id="densityComboBox">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="MALY"/>
-                        <String fx:value="SREDNI"/>
-                        <String fx:value="DUZY"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
+            <Label prefHeight="25.0" prefWidth="108.0" text="%cols_label"/>
+            <TextField fx:id="colsInput" promptText="%cols_prompt"/>
         </HBox>
 
-        <Button text="Rozpocznij" onAction="#startSimulation" />
+        <HBox spacing="10">
+            <Label prefHeight="25.0" prefWidth="136.0" text="%density_label"/>
+            <ComboBox fx:id="densityComboBox"/>
+        </HBox>
+
+        <Button onAction="#startSimulation" text="%start_button"/>
     </VBox>
 </AnchorPane>

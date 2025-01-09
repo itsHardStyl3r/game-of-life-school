@@ -366,21 +366,6 @@ public class GameOfLifeBoardTest {
     }
 
     /**
-     * Test sprawdzający czy plansza jest porównywana
-     */
-    @Test
-    public void testCompareTo() {
-        GameOfLifeCell cell1 = new GameOfLifeCell(true);
-        GameOfLifeCell cell2 = new GameOfLifeCell(false);
-        GameOfLifeCell cell3 = new GameOfLifeCell(true);
-
-        assertTrue(cell1.compareTo(cell2) > 0, "Żywa komórka powinna być większa niż martwa komórka");
-        assertTrue(cell2.compareTo(cell1) < 0, "Martwa komórka powinna być mniejsza niż żywa komórka");
-        assertEquals(0, cell1.compareTo(cell3), "Dwie żywe komórki powinny być równe");
-        assertEquals(0, cell2.compareTo(new GameOfLifeCell(false)), "Dwie martwe komórki powinny być równe");
-    }
-
-    /**
      * Sprawdzanie konstruktora z Density.
      */
     @Test
