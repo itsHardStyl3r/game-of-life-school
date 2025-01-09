@@ -39,8 +39,7 @@ public class SimulationSceneController {
 
                     cellLabel.styleProperty().bindBidirectional(cellValueProperty, cellStyleConverter);
                     cellLabel.setOnMouseClicked(event -> {
-                        cell.updateState(!cell.getCellValue());
-                        renderBoard();
+                        cellValueProperty.set(!cellValueProperty.get());
                     });
                     gameGrid.add(cellLabel, j, i);
                 } catch (NoSuchMethodException e) {
