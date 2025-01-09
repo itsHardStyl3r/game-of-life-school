@@ -8,12 +8,14 @@ import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import pl.comp.Density;
 
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainSceneController {
 
-    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.DEFAULTLOCALE);
+    public static Locale locale = Main.DEFAULTLOCALE;
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages", getLocale());
 
     @FXML
     private ComboBox<String> densityComboBox;
@@ -67,12 +69,20 @@ public class MainSceneController {
         densityComboBox.setValue(bundle.getString("medium"));
     }
 
+    public static Locale getLocale() {
+        return locale;
+    }
+
+    public static void setLocale(Locale l) {
+        locale = l;
+    }
+
     @FXML
     public void startSimulation() {
         try {
             int rows = Integer.parseInt(rowsInput.getText());
             int cols = Integer.parseInt(colsInput.getText());
-            String densityValue = densityComboBox.getValue();
+            final String densityValue = densityComboBox.getValue();
 
             if (rows < 4 || rows > 20 || cols < 4 || cols > 20) {
                 throw new IllegalArgumentException("Plansza moze miec wymiary od 4 do 20 w kazda strone.");
@@ -88,6 +98,14 @@ public class MainSceneController {
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(simulationScene);
             stage.setTitle(bundle.getString("simulationTitle"));
+            ResourceBundle authors = ResourceBundle.getBundle("MyResource", getLocale());
+            System.out.println(authors.getString("authorTitle") + ":");
+            for (Enumeration<String> e = authors.getKeys(); e.hasMoreElements(); ) {
+                String s = e.nextElement();
+                if (s.startsWith("authorName")) {
+                    System.out.println(authors.getString(s));
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,7 +126,8 @@ public class MainSceneController {
     public void changeLanguage(String languageCode) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-            bundle = ResourceBundle.getBundle("messages", Locale.of(languageCode));
+            setLocale(Locale.of(languageCode));
+            bundle = ResourceBundle.getBundle("messages", getLocale());
             loader.setResources(bundle);
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));

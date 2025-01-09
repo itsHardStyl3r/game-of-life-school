@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 public class Main extends Application {
 
     public static final String FILESAVENAME = "save.txt";
-    public static final Locale DEFAULTLOCALE = Locale.of("pl");
+    public static final Locale DEFAULTLOCALE = Locale.of("pl_PL");
 
     public static void main(String[] args) {
         launch(Main.class, args);
