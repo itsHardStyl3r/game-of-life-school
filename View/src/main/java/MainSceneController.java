@@ -16,8 +16,7 @@ import java.util.ResourceBundle;
 
 public class MainSceneController {
 
-    public static Locale locale = Main.DEFAULTLOCALE;
-    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.DEFAULTLOCALE);
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
     private static final Logger logger = LoggerFactory.getLogger(MainSceneController.class);
 
     @FXML
@@ -72,14 +71,6 @@ public class MainSceneController {
         densityComboBox.setValue(bundle.getString("medium"));
     }
 
-    public static Locale getLocale() {
-        return locale;
-    }
-
-    public static void setLocale(Locale l) {
-        locale = l;
-    }
-
     @FXML
     public void startSimulation() {
         try {
@@ -102,7 +93,7 @@ public class MainSceneController {
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(simulationScene);
             stage.setTitle(bundle.getString("simulationTitle"));
-            ResourceBundle authors = ResourceBundle.getBundle("MyResource", getLocale());
+            ResourceBundle authors = ResourceBundle.getBundle("MyResource", Main.getLocale());
             System.out.println(authors.getString("authorTitle") + ":");
             for (Enumeration<String> e = authors.getKeys(); e.hasMoreElements(); ) {
                 String s = e.nextElement();
@@ -130,8 +121,8 @@ public class MainSceneController {
     public void changeLanguage(String languageCode) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-            setLocale(Locale.of(languageCode));
-            bundle = ResourceBundle.getBundle("messages", getLocale());
+            Main.setLocale(Locale.of(languageCode));
+            bundle = ResourceBundle.getBundle("messages", Main.getLocale());
             loader.setResources(bundle);
             Stage stage = (Stage) rowsInput.getScene().getWindow();
             stage.setScene(new Scene(loader.load()));
