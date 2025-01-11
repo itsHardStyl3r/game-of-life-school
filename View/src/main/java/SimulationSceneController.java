@@ -3,12 +3,18 @@ import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.comp.*;
+
+import java.util.ResourceBundle;
 
 public class SimulationSceneController {
 
-    private final FileGameOfLifeBoardDao fdao = new FileGameOfLifeBoardDao(Main.FILESAVENAME);
     private final CellStyleConverter cellStyleConverter = new CellStyleConverter();
+    private final Logger logger = LoggerFactory.getLogger(SimulationSceneController.class);
+    private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
+
     @FXML
     private GridPane gameGrid;
     private GameOfLifeBoard gameBoard;
@@ -57,12 +63,20 @@ public class SimulationSceneController {
 
     @FXML
     public void saveBoard() {
-        fdao.write(gameBoard);
+        try (Dao<GameOfLifeBoard> dao = new FileGameOfLifeBoardDao(Main.FILESAVENAME)) {
+            dao.write(gameBoard);
+        } catch (Exception e) {
+            logger.error(bundle.getString("daoWriteException"), e);
+        }
     }
 
     @FXML
     public void loadBoard() {
-        gameBoard = fdao.read();
-        renderBoard();
+        try (Dao<GameOfLifeBoard> dao = new FileGameOfLifeBoardDao(Main.FILESAVENAME)) {
+            gameBoard = dao.read();
+            renderBoard();
+        } catch (Exception e) {
+            logger.error(bundle.getString("daoReadException"), e);
+        }
     }
 }
