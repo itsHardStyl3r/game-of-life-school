@@ -3,6 +3,8 @@ package pl.comp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.comp.storage.Dao;
+import pl.comp.storage.GameOfLifeBoardDaoFactory;
 
 import java.io.File;
 

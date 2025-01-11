@@ -6,6 +6,8 @@ import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.comp.*;
+import pl.comp.storage.Dao;
+import pl.comp.storage.FileGameOfLifeBoardDao;
 
 import java.util.ResourceBundle;
 
