@@ -178,11 +178,5 @@ public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
 
     @Override
     public void close() {
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbName, dbPassword)) {
-            logger.info("Closing {}", gameName);
-            conn.createStatement().executeUpdate("SHUTDOWN COMPACT");
-        } catch (Exception e) {
-            logger.error("{} {}", getLocaleMessage("sqlException"), e.getMessage());
-        }
     }
 }
