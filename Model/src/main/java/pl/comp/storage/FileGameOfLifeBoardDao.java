@@ -29,7 +29,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
             inputStream = new ObjectInputStream(new FileInputStream(fileName));
             return (GameOfLifeBoard) inputStream.readUnshared();
         } catch (Exception e) {
-            logger.error(getLocaleMessage("daoException"), e);
+            logger.error(getLocaleMessage("daoException"), e.toString());
             close();
             throw new DaoReadException();
         }
@@ -41,7 +41,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
             outputStream = new ObjectOutputStream(new FileOutputStream(fileName));
             outputStream.writeUnshared(board);
         } catch (Exception e) {
-            logger.error(getLocaleMessage("daoException"), e);
+            logger.error(getLocaleMessage("daoException"), e.toString());
             close();
             throw new DaoWriteException();
         }
@@ -59,7 +59,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
                 inputStream = null;
             }
         } catch (Exception e) {
-            logger.error(getLocaleMessage("daoException"), e);
+            logger.error(getLocaleMessage("daoException"), e.toString());
         }
     }
 }

@@ -83,7 +83,7 @@ public class SimulationSceneController {
         try (Dao<GameOfLifeBoard> dao = createFileGameOfLifeBoardDao(Main.FILESAVENAME)) {
             dao.write(gameBoard);
         } catch (Exception e) {
-            logger.error(bundle.getString("daoWriteException"), e);
+            logger.error(bundle.getString("daoWriteException"), e.toString());
         }
     }
 
@@ -93,7 +93,7 @@ public class SimulationSceneController {
             gameBoard = dao.read();
             renderBoard();
         } catch (Exception e) {
-            logger.error(bundle.getString("daoReadException"), e);
+            logger.error(bundle.getString("daoReadException"), e.toString());
         }
     }
 
