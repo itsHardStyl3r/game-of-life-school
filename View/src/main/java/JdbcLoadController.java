@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.comp.GameOfLifeBoard;
-import pl.comp.storage.JdbcGameOfLifeBoardDao;
+import pl.comp.storage.Dao;
 import pl.comp.storage.JdbcGameOfLifeReader;
 
 import java.util.ResourceBundle;
+
+import static pl.comp.storage.GameOfLifeBoardDaoFactory.createDatabaseGameOfLifeBoardDao;
 
 public class JdbcLoadController {
 
@@ -38,7 +40,7 @@ public class JdbcLoadController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(bundle.getString("loadPromptTitle"));
         alert.setHeaderText(bundle.getString("loadPromptTitle"));
-        try (JdbcGameOfLifeBoardDao dao = new JdbcGameOfLifeBoardDao(gameName, false)) {
+        try (Dao<GameOfLifeBoard> dao = createDatabaseGameOfLifeBoardDao(gameName, false)) {
             GameOfLifeBoard board = dao.read();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("simulation.fxml"));

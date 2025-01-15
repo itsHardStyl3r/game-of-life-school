@@ -13,9 +13,10 @@ import pl.comp.GameOfLifeBoard;
 import pl.comp.GameOfLifeCell;
 import pl.comp.PlainGameOfLifeSimulator;
 import pl.comp.storage.Dao;
-import pl.comp.storage.FileGameOfLifeBoardDao;
 
 import java.util.ResourceBundle;
+
+import static pl.comp.storage.GameOfLifeBoardDaoFactory.createFileGameOfLifeBoardDao;
 
 public class SimulationSceneController {
 
@@ -79,7 +80,7 @@ public class SimulationSceneController {
 
     @FXML
     public void saveToFile() {
-        try (Dao<GameOfLifeBoard> dao = new FileGameOfLifeBoardDao(Main.FILESAVENAME)) {
+        try (Dao<GameOfLifeBoard> dao = createFileGameOfLifeBoardDao(Main.FILESAVENAME)) {
             dao.write(gameBoard);
         } catch (Exception e) {
             logger.error(bundle.getString("daoWriteException"), e);
@@ -88,7 +89,7 @@ public class SimulationSceneController {
 
     @FXML
     public void loadFromFile() {
-        try (Dao<GameOfLifeBoard> dao = new FileGameOfLifeBoardDao(Main.FILESAVENAME)) {
+        try (Dao<GameOfLifeBoard> dao = createFileGameOfLifeBoardDao(Main.FILESAVENAME)) {
             gameBoard = dao.read();
             renderBoard();
         } catch (Exception e) {

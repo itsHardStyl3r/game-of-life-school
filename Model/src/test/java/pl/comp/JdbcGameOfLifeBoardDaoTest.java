@@ -2,10 +2,11 @@ package pl.comp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.comp.storage.JdbcGameOfLifeBoardDao;
+import pl.comp.storage.Dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static pl.comp.storage.GameOfLifeBoardDaoFactory.createDatabaseGameOfLifeBoardDao;
 
 public class JdbcGameOfLifeBoardDaoTest {
     private final String gameName = "g" + System.currentTimeMillis();
@@ -21,7 +22,7 @@ public class JdbcGameOfLifeBoardDaoTest {
 
     @Test
     public void testWriteAndRead() {
-        try (JdbcGameOfLifeBoardDao dao = new JdbcGameOfLifeBoardDao(gameName, true)) {
+        try (Dao<GameOfLifeBoard> dao = createDatabaseGameOfLifeBoardDao(gameName, true)) {
             dao.write(board);
 
             GameOfLifeBoard readBoard = dao.read();

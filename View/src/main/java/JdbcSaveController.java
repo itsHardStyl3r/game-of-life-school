@@ -4,9 +4,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.comp.storage.JdbcGameOfLifeBoardDao;
+import pl.comp.GameOfLifeBoard;
+import pl.comp.storage.Dao;
 
 import java.util.ResourceBundle;
+
+import static pl.comp.storage.GameOfLifeBoardDaoFactory.createDatabaseGameOfLifeBoardDao;
 
 public class JdbcSaveController {
 
@@ -39,7 +42,7 @@ public class JdbcSaveController {
             alert.show();
             return;
         }
-        try (JdbcGameOfLifeBoardDao dao = new JdbcGameOfLifeBoardDao(gameName, false)) {
+        try (Dao<GameOfLifeBoard> dao = createDatabaseGameOfLifeBoardDao(gameName, false)) {
             dao.write(SimulationSceneController.getGameBoard());
             alert.setContentText(bundle.getString("dbGameSaved").replace("<gameName>", gameName));
         } catch (Exception e) {
