@@ -1,17 +1,39 @@
 import javafx.beans.property.adapter.JavaBeanBooleanProperty;
 import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import pl.comp.*;
+import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.comp.Density;
+import pl.comp.GameOfLifeBoard;
+import pl.comp.GameOfLifeCell;
+import pl.comp.PlainGameOfLifeSimulator;
+import pl.comp.storage.Dao;
+
+import java.util.ResourceBundle;
+
+import static pl.comp.storage.GameOfLifeBoardDaoFactory.createFileGameOfLifeBoardDao;
 
 public class SimulationSceneController {
 
-    private final FileGameOfLifeBoardDao fdao = new FileGameOfLifeBoardDao(Main.FILESAVENAME);
+    private static GameOfLifeBoard gameBoard;
     private final CellStyleConverter cellStyleConverter = new CellStyleConverter();
+    private final Logger logger = LoggerFactory.getLogger(SimulationSceneController.class);
+    private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
     @FXML
     private GridPane gameGrid;
-    private GameOfLifeBoard gameBoard;
+
+    public static GameOfLifeBoard getGameBoard() {
+        return gameBoard;
+    }
+
+    public void setGameBoard(GameOfLifeBoard board) {
+        gameBoard = board;
+    }
 
     @FXML
     public void initialize() {
@@ -22,7 +44,7 @@ public class SimulationSceneController {
         renderBoard();
     }
 
-    private void renderBoard() {
+    public void renderBoard() {
         gameGrid.getChildren().clear();
 
         for (int i = 0; i < gameBoard.getRows().size(); i++) {
@@ -56,13 +78,52 @@ public class SimulationSceneController {
     }
 
     @FXML
-    public void saveBoard() {
-        fdao.write(gameBoard);
+    public void saveToFile() {
+        try (Dao<GameOfLifeBoard> dao = createFileGameOfLifeBoardDao(Main.FILESAVENAME)) {
+            dao.write(gameBoard);
+        } catch (Exception e) {
+            logger.error(bundle.getString("daoWriteException"), e.toString());
+        }
     }
 
     @FXML
-    public void loadBoard() {
-        gameBoard = fdao.read();
-        renderBoard();
+    public void loadFromFile() {
+        try (Dao<GameOfLifeBoard> dao = createFileGameOfLifeBoardDao(Main.FILESAVENAME)) {
+            gameBoard = dao.read();
+            renderBoard();
+        } catch (Exception e) {
+            logger.error(bundle.getString("daoReadException"), e.toString());
+        }
+    }
+
+    @FXML
+    public void openDatabaseSave() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("databaseSave.fxml"));
+            loader.setResources(bundle);
+            Scene databaseSaveScene = new Scene(loader.load());
+
+            Stage stage = new Stage();
+            stage.setScene(databaseSaveScene);
+            stage.setTitle(bundle.getString("savePromptTitle"));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void openDatabaseLoad() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("databaseLoad.fxml"));
+            loader.setResources(bundle);
+            Scene databaseLoadScene = new Scene(loader.load());
+
+            Stage stage = (Stage) gameGrid.getScene().getWindow();
+            stage.setScene(databaseLoadScene);
+            stage.setTitle(bundle.getString("loadPromptTitle"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

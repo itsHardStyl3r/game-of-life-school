@@ -16,6 +16,14 @@ public class Main extends Application {
         launch(Main.class, args);
     }
 
+    public static Locale getLocale() {
+        return locale;
+    }
+
+    public static void setLocale(Locale l) {
+        locale = l;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
@@ -31,13 +39,5 @@ public class Main extends Application {
     public void stop() {
         File file = new File(FILESAVENAME);
         file.delete();
-    }
-
-    public static Locale getLocale() {
-        return locale;
-    }
-
-    public static void setLocale(Locale l) {
-        locale = l;
     }
 }

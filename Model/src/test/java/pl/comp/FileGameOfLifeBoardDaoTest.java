@@ -3,6 +3,8 @@ package pl.comp;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.comp.storage.Dao;
+import pl.comp.storage.GameOfLifeBoardDaoFactory;
 
 import java.io.File;
 
@@ -11,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileGameOfLifeBoardDaoTest {
     private static final String TEST_FILE = "board" + System.currentTimeMillis() + ".txt";
     private final PlainGameOfLifeSimulator simulator = new PlainGameOfLifeSimulator();
-    private GameOfLifeBoard board;
     private final File file = new File(TEST_FILE);
+    private GameOfLifeBoard board;
 
     @BeforeEach
     void setUp() {
