@@ -12,5 +12,6 @@
             <ListView fx:id="listView" minHeight="200"/>
         </HBox>
         <Button onAction="#read" text="%dbReadProceed"/>
+        <Button onAction="#goBack" text="%goBack"/>
     </VBox>
 </AnchorPane>

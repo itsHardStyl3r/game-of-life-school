@@ -35,6 +35,22 @@ public class JdbcLoadController {
     }
 
     @FXML
+    public void goBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("simulation.fxml"));
+            loader.setResources(bundle);
+            Scene simulationScene = new Scene(loader.load());
+            SimulationSceneController controller = loader.getController();
+            controller.renderBoard();
+            Stage stage = (Stage) listView.getScene().getWindow();
+            stage.setScene(simulationScene);
+            stage.setTitle(bundle.getString("simulationTitle"));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @FXML
     public void read() {
         if (listView.getItems().isEmpty()) {
             return;
