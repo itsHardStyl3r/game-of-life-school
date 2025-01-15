@@ -38,6 +38,7 @@ public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
             throw new UnknownGameException();
         }
         this.gameName = gameName;
+
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.txt");
         if (inputStream == null) {
             throw new DbCredentialsException();

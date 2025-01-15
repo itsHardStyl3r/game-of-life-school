@@ -7,7 +7,7 @@ public class GameOfLifeBoardDaoFactory {
         return new FileGameOfLifeBoardDao(fileName);
     }
 
-    public static Dao<GameOfLifeBoard> createDatabaseGameOfLifeBoardDao(String gameName) {
-        return new JdbcGameOfLifeBoardDao(gameName, false);
+    public static Dao<GameOfLifeBoard> createDatabaseGameOfLifeBoardDao(String gameName, boolean inMemory) {
+        return new JdbcGameOfLifeBoardDao(gameName, inMemory);
     }
 }
