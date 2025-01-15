@@ -3,6 +3,8 @@ package pl.comp.storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.comp.GameOfLifeBoard;
+import pl.comp.exceptions.DaoReadException;
+import pl.comp.exceptions.DaoWriteException;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,8 +31,8 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
         } catch (Exception e) {
             logger.error(getLocaleMessage("daoException"), e);
             close();
+            throw new DaoReadException();
         }
-        return null;
     }
 
     @Override
@@ -41,6 +43,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
         } catch (Exception e) {
             logger.error(getLocaleMessage("daoException"), e);
             close();
+            throw new DaoWriteException();
         }
     }
 
