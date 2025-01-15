@@ -36,6 +36,9 @@ public class JdbcLoadController {
 
     @FXML
     public void read() {
+        if (listView.getItems().isEmpty()) {
+            return;
+        }
         String gameName = listView.getSelectionModel().getSelectedItem();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(bundle.getString("loadPromptTitle"));
