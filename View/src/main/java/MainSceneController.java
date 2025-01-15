@@ -16,9 +16,8 @@ import java.util.ResourceBundle;
 
 public class MainSceneController {
 
-    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
     private final Logger logger = LoggerFactory.getLogger(MainSceneController.class);
-
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
     @FXML
     private ComboBox<String> densityComboBox;
 

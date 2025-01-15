@@ -21,9 +21,9 @@ import static pl.comp.GameOfLifeBoard.getLocaleMessage;
  * Na podstawie stanu sąsiadów komórka decyduje o swoim stanie w kolejnym kroku symulacji.
  */
 public class GameOfLifeCell implements Serializable, Cloneable, Comparable<GameOfLifeCell> {
+    private final Logger logger = LoggerFactory.getLogger(GameOfLifeCell.class);
     private boolean value;
     private List<GameOfLifeCell> neighbors;
-    private final Logger logger = LoggerFactory.getLogger(GameOfLifeCell.class);
 
     /**
      * Tworzy nową komórkę z określonym stanem.

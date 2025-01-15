@@ -24,7 +24,7 @@ public class GameOfLifeColumnTest {
     }
 
     @Test
-    public void testComparing(){
+    public void testComparing() {
         GameOfLifeCell[] cells = {
                 new GameOfLifeCell(true),
                 new GameOfLifeCell(false),

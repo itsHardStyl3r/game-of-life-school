@@ -20,13 +20,12 @@ import static pl.comp.storage.GameOfLifeBoardDaoFactory.createFileGameOfLifeBoar
 
 public class SimulationSceneController {
 
+    private static GameOfLifeBoard gameBoard;
     private final CellStyleConverter cellStyleConverter = new CellStyleConverter();
     private final Logger logger = LoggerFactory.getLogger(SimulationSceneController.class);
     private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Main.getLocale());
-
     @FXML
     private GridPane gameGrid;
-    private static GameOfLifeBoard gameBoard;
 
     public static GameOfLifeBoard getGameBoard() {
         return gameBoard;

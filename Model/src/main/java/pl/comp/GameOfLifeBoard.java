@@ -20,10 +20,10 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
     private final int rowsCount;
     private final int colsCount;
     private final GameOfLifeSimulator simulator;
+    private final Logger logger = LoggerFactory.getLogger(GameOfLifeBoard.class);
     private GameOfLifeCell[][] board;
     private List<GameOfLifeRow> rows;
     private List<GameOfLifeColumn> columns;
-    private final Logger logger = LoggerFactory.getLogger(GameOfLifeBoard.class);
 
     /**
      * Konstruktor klasy {@link GameOfLifeBoard}.
@@ -74,6 +74,14 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
         initializeBoard(density == null ? Density.FULL : density);
     }
 
+    public static String getLocaleMessage(String s) {
+        try {
+            return ResourceBundle.getBundle("messages").getString(s);
+        } catch (MissingResourceException e) {
+            return "missing " + s;
+        }
+    }
+
     /**
      * Inicjalizuje planszę losowymi wartościami komórek
      * Korzysta z `Collections.shuffle()` do losowego ustawienia stanu komórek
@@ -118,14 +126,6 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
         rows = FixedSizeList.fixedSizeList(rows);
         columns = FixedSizeList.fixedSizeList(columns);
         linkNeighbors();
-    }
-
-    public static String getLocaleMessage(String s) {
-        try {
-            return ResourceBundle.getBundle("messages").getString(s);
-        } catch (MissingResourceException e) {
-            return "missing " + s;
-        }
     }
 
     /**

@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileGameOfLifeBoardDaoTest {
     private static final String TEST_FILE = "board" + System.currentTimeMillis() + ".txt";
     private final PlainGameOfLifeSimulator simulator = new PlainGameOfLifeSimulator();
-    private GameOfLifeBoard board;
     private final File file = new File(TEST_FILE);
+    private GameOfLifeBoard board;
 
     @BeforeEach
     void setUp() {

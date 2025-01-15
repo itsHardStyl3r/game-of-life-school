@@ -15,9 +15,9 @@ import static pl.comp.GameOfLifeBoard.getLocaleMessage;
 
 public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseable {
     private final String fileName;
+    private final Logger logger = LoggerFactory.getLogger(FileGameOfLifeBoardDao.class);
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
-    private final Logger logger = LoggerFactory.getLogger(FileGameOfLifeBoardDao.class);
 
     public FileGameOfLifeBoardDao(String fileName) {
         this.fileName = fileName;

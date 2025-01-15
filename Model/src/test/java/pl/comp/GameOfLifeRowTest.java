@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class GameOfLifeRowTest {
     /**
@@ -23,7 +24,7 @@ public class GameOfLifeRowTest {
     }
 
     @Test
-    public void testComparing(){
+    public void testComparing() {
         GameOfLifeCell[] cells = {
                 new GameOfLifeCell(true),
                 new GameOfLifeCell(false),

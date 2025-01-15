@@ -25,7 +25,7 @@ public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
      * @param gameName A name of game.
      * @param inMemory If true, in-memory database will be used (no file creation). Good for tests. There is 10 seconds
      *                 delay for in-memory option.
-     * @throws UnknownGameException   When no game name is specified.
+     * @throws UnknownGameException When no game name is specified.
      */
     public JdbcGameOfLifeBoardDao(String gameName, boolean inMemory) {
         if (gameName == null || gameName.isEmpty()) {
