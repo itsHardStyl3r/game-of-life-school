@@ -6,13 +6,8 @@ import pl.comp.GameOfLifeBoard;
 import pl.comp.PlainGameOfLifeSimulator;
 import pl.comp.exceptions.DaoReadException;
 import pl.comp.exceptions.DaoWriteException;
-import pl.comp.exceptions.DbCredentialsException;
 import pl.comp.exceptions.UnknownGameException;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 import static pl.comp.GameOfLifeBoard.getLocaleMessage;
@@ -20,9 +15,9 @@ import static pl.comp.GameOfLifeBoard.getLocaleMessage;
 public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseable {
     private final Logger logger = LoggerFactory.getLogger(JdbcGameOfLifeBoardDao.class);
     private final String gameName;
-    private String dbName;
-    private String dbPassword;
-    private String dbUrl;
+    private final String dbName = "admin";
+    private final String dbPassword = "admin";
+    private final String dbUrl;
 
     /**
      * A constructor of DAO that supports writing to H2 database.
@@ -31,7 +26,6 @@ public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
      * @param inMemory If true, in-memory database will be used (no file creation). Good for tests. There is 10 seconds
      *                 delay for in-memory option.
      * @throws UnknownGameException   When no game name is specified.
-     * @throws DbCredentialsException On invalid credentials or issue with credentials.txt.
      */
     public JdbcGameOfLifeBoardDao(String gameName, boolean inMemory) {
         if (gameName == null || gameName.isEmpty()) {
@@ -39,23 +33,10 @@ public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
         }
         this.gameName = gameName;
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.txt");
-        if (inputStream == null) {
-            throw new DbCredentialsException();
-        }
-        try (InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(streamReader)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                dbName = line.split("\\|")[0];
-                dbPassword = line.split("\\|")[1];
-                dbUrl = "jdbc:h2:" + line.split("\\|")[2];
-            }
-        } catch (Exception e) {
-            throw new DbCredentialsException();
-        }
         if (inMemory) {
             dbUrl = "jdbc:h2:mem:gameoflife;DB_CLOSE_DELAY=10";
+        } else {
+            dbUrl = "jdbc:h2:file:./gameoflife";
         }
         initDatabase();
     }
