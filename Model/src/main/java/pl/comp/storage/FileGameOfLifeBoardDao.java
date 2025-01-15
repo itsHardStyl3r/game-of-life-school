@@ -15,7 +15,7 @@ public class FileGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseab
     private final String fileName;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
-    private static final Logger logger = LoggerFactory.getLogger(FileGameOfLifeBoardDao.class);
+    private final Logger logger = LoggerFactory.getLogger(FileGameOfLifeBoardDao.class);
 
     public FileGameOfLifeBoardDao(String fileName) {
         this.fileName = fileName;

@@ -18,7 +18,7 @@ import java.sql.*;
 import static pl.comp.GameOfLifeBoard.getLocaleMessage;
 
 public class JdbcGameOfLifeBoardDao implements Dao<GameOfLifeBoard>, AutoCloseable {
-    private static final Logger logger = LoggerFactory.getLogger(JdbcGameOfLifeBoardDao.class);
+    private final Logger logger = LoggerFactory.getLogger(JdbcGameOfLifeBoardDao.class);
     private final String gameName;
     private String dbName;
     private String dbPassword;

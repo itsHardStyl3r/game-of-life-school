@@ -23,8 +23,7 @@ public class GameOfLifeBoard implements Serializable, Cloneable {
     private GameOfLifeCell[][] board;
     private List<GameOfLifeRow> rows;
     private List<GameOfLifeColumn> columns;
-
-    private static final Logger logger = LoggerFactory.getLogger(GameOfLifeBoard.class);
+    private final Logger logger = LoggerFactory.getLogger(GameOfLifeBoard.class);
 
     /**
      * Konstruktor klasy {@link GameOfLifeBoard}.

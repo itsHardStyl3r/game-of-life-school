@@ -19,7 +19,7 @@ public class JdbcGameOfLifeReader implements AutoCloseable {
     private String dbName;
     private String dbPassword;
     private String dbUrl;
-    private static final Logger logger = LoggerFactory.getLogger(JdbcGameOfLifeBoardDao.class);
+    private final Logger logger = LoggerFactory.getLogger(JdbcGameOfLifeReader.class);
 
     public JdbcGameOfLifeReader() {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials.txt");

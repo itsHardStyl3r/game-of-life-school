@@ -23,7 +23,7 @@ import static pl.comp.GameOfLifeBoard.getLocaleMessage;
 public class GameOfLifeCell implements Serializable, Cloneable, Comparable<GameOfLifeCell> {
     private boolean value;
     private List<GameOfLifeCell> neighbors;
-    private static final Logger logger = LoggerFactory.getLogger(GameOfLifeCell.class);
+    private final Logger logger = LoggerFactory.getLogger(GameOfLifeCell.class);
 
     /**
      * Tworzy nową komórkę z określonym stanem.
